@@ -505,6 +505,26 @@
     font-size: 11px; font-weight: 600; color: var(--accent-soft-ink);
     background: var(--accent-soft-bg); padding: 2px 8px; border-radius: 100px;
   }
+
+  .lock-gate {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    gap: 10px;
+    padding: 56px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .lock-icon { font-size: 34px; }
+  .lock-text { font-size: 13.5px; color: var(--ink-secondary); max-width: 46ch; margin: 0; }
+  .lock-form { display: flex; gap: 8px; margin-top: 8px; }
+  .lock-form input {
+    font-size: 13.5px; padding: 10px 14px; width: 220px;
+    border: 1px solid var(--border-strong); border-radius: 100px;
+    background: var(--surface-sunken); color: var(--ink-primary);
+  }
+  .lock-form input:focus { outline: none; border-color: var(--accent); }
+  .lock-error { font-size: 12.5px; color: var(--accent); font-weight: 600; margin: 0; }
+  .lock-status { font-size: 11.5px; color: var(--ink-muted); margin: 0; }
   .chamado-subject { font-size: 13.5px; font-weight: 700; margin: 0 0 10px; line-height: 1.4; }
   .chamado-qa { display: flex; flex-direction: column; gap: 8px; }
   .chamado-qa-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 2px; }
@@ -958,19 +978,30 @@
         <div class="warn-banner">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
           <div>
-            <strong>Protótipo com dados fictícios — não são chamados reais.</strong>
-            Os 130 mil chamados já foram processados (114 mil com resposta real, 70 mil substantivos depois de remover mensagens automáticas) e tratados — nome, CPF, telefone e e-mail da pessoa física removidos, mantendo instituição e município. Os padrões mais comuns já viraram perguntas em <strong>"Perguntas Frequentes"</strong>, que é 100% real.
-            Os chamados individuais (com instituição) ainda ficam de fora deste site público — combinamos esperar um mecanismo de acesso restrito antes de publicá-los, mesmo tratados. Os exemplos abaixo continuam fictícios, só para mostrar o formato.
+            <strong>Acervo real, restrito por senha.</strong>
+            10.204 chamados reais (de 70 mil substantivos processados), com nome, CPF, telefone e e-mail da pessoa removidos — instituição e município preservados. O conteúdo fica cifrado (AES-256) e só é decifrado no seu navegador, com a senha do time.
           </div>
         </div>
 
-        <div class="search-box" style="max-width:none; margin-bottom:14px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="text" placeholder="Buscar por assunto, tipo de problema ou palavra da resposta…" id="chamado-search">
+        <div class="lock-gate" id="chamado-lock">
+          <div class="lock-icon">🔒</div>
+          <p class="lock-text">Esta seção é restrita. Peça a senha de acesso ao administrador do painel.</p>
+          <div class="lock-form">
+            <input type="password" id="chamado-pass-input" placeholder="Senha de acesso" autocomplete="off">
+            <button class="btn-red" id="chamado-unlock-btn">Acessar</button>
+          </div>
+          <p class="lock-error" id="chamado-lock-error" style="display:none;">Senha incorreta. Tente novamente.</p>
+          <p class="lock-status" id="chamado-lock-status"></p>
         </div>
 
-        <div class="law-grid" id="chamado-list"></div>
-        <p class="law-note" id="chamado-count"></p>
+        <div id="chamado-content" style="display:none;">
+          <div class="search-box" style="max-width:none; margin-bottom:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" placeholder="Buscar por assunto, tipo de problema ou palavra da resposta…" id="chamado-search">
+          </div>
+          <div class="law-grid" id="chamado-list"></div>
+          <p class="law-note" id="chamado-count"></p>
+        </div>
       </div>
 
       <!-- VIEW: PERGUNTAS FREQUENTES -->
@@ -1129,15 +1160,52 @@
         '</div>';
       list.appendChild(card);
     });
-    countEl.textContent = filtered.length + ' de ' + CHAMADOS.length + ' chamados nesta amostra (prévia — não é a base completa).';
+    countEl.textContent = filtered.length + ' de ' + CHAMADOS.length + ' chamados reais nesta amostra (de 70 mil processados).';
   }
-  fetch('chamados_preview.json').then(r => r.json()).then(data => {
-    CHAMADOS = data;
-    renderChamados('');
-  }).catch(() => {
-    document.getElementById('chamado-count').textContent = 'Não foi possível carregar chamados_preview.json.';
-  });
   document.getElementById('chamado-search').addEventListener('input', (e) => renderChamados(e.target.value));
+
+  // Decriptação client-side (AES-256-GCM / PBKDF2) — a senha nunca sai do navegador
+  async function deriveKey(password, saltB64, iterations) {
+    const enc = new TextEncoder();
+    const salt = Uint8Array.from(atob(saltB64), c => c.charCodeAt(0));
+    const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' },
+      keyMaterial,
+      { name: 'AES-GCM', length: 256 },
+      false,
+      ['decrypt']
+    );
+  }
+  function b64ToBytes(b64) { return Uint8Array.from(atob(b64), c => c.charCodeAt(0)); }
+
+  async function tryUnlockChamados(password) {
+    const statusEl = document.getElementById('chamado-lock-status');
+    const errorEl = document.getElementById('chamado-lock-error');
+    errorEl.style.display = 'none';
+    statusEl.textContent = 'Carregando e decifrando…';
+    try {
+      const payload = await fetch('chamados_encrypted.json').then(r => r.json());
+      const key = await deriveKey(password, payload.salt, payload.iterations);
+      const iv = b64ToBytes(payload.iv);
+      const cipherBytes = b64ToBytes(payload.ciphertext);
+      const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipherBytes);
+      const json = new TextDecoder().decode(plainBuf);
+      CHAMADOS = JSON.parse(json);
+      document.getElementById('chamado-lock').style.display = 'none';
+      document.getElementById('chamado-content').style.display = 'block';
+      renderChamados('');
+    } catch (e) {
+      statusEl.textContent = '';
+      errorEl.style.display = 'block';
+    }
+  }
+  document.getElementById('chamado-unlock-btn').addEventListener('click', () => {
+    tryUnlockChamados(document.getElementById('chamado-pass-input').value);
+  });
+  document.getElementById('chamado-pass-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryUnlockChamados(e.target.value);
+  });
 
   // Perguntas Frequentes — sintetizadas a partir dos padrões mais comuns do histórico real
   fetch('faq.json').then(r => r.json()).then(data => {
