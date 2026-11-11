@@ -1,0 +1,50 @@
+[
+  {
+    "category": "Acesso",
+    "question": "Meu usuário do SIGCON está revogado — como recupero o acesso?",
+    "answer": "Acesse sigconsaida.mg.gov.br, passe o mouse em \"Entrar\" e clique em \"Trocar Senha\" (ou \"Solicitar/Recuperar Login e senha\"). Escolha o tipo de instituição (Conselho Municipal, Prefeitura, Parlamentar etc.) e siga o passo a passo para definir uma nova senha. Regras da senha: 6 ou 8 caracteres, começar com letra, ter letras e números, sem vogais, e não repetir nenhuma das últimas 16 senhas usadas.",
+    "basedOn": 8063
+  },
+  {
+    "category": "Acesso",
+    "question": "Não sei meu usuário — e se eu for um Convenente (OSC ou entidade privada)?",
+    "answer": "Convenentes recuperam o acesso de forma diferente dos órgãos públicos: na página inicial do SIGCON, clique em \"Convenentes\" (coluna da direita) e depois em \"Recuperar\". Informe o CPF cadastrado e clique em \"Enviar\" — chega um link de redefinição de senha no e-mail cadastrado no sistema.",
+    "basedOn": 2974
+  },
+  {
+    "category": "Acesso",
+    "question": "Como cadastrar um novo usuário / novo Representante Legal?",
+    "answer": "1) Crie o usuário e senha do novo Representante Legal em cagec.mg.gov.br/convenente-web/cadastraUsuario. 2) Entre no sistema com o login e senha desse novo representante. 3) Vá em Menu → \"Solicitar Inscrição Parceiro/Convenente\". 4) Preencha a solicitação com os dados e documentos pedidos.",
+    "basedOn": 4607
+  },
+  {
+    "category": "Prestação de contas",
+    "question": "Posso enviar os documentos da prestação de contas por e-mail?",
+    "answer": "Não. Desde 31/01/2020 (Resolução Conjunta SEGOV/CGE nº 05/2020), o CAGEC não aceita mais documentação por e-mail — tudo deve ser enviado pelo próprio sistema, por meio de uma solicitação criada dentro da plataforma.",
+    "basedOn": 433
+  },
+  {
+    "category": "Prestação de contas",
+    "question": "Como consultar o Certificado de Regularidade (CRC)?",
+    "answer": "Acesse cagec.mg.gov.br, vá em \"Certificado/Autenticação\" → \"Consultar Certificado (CRC)\", digite o CNPJ (recomendado, por ser um campo numérico) e clique em \"Pesquisar\". Em seguida, clique em \"Emitir CRC\".",
+    "basedOn": 433
+  },
+  {
+    "category": "Propostas",
+    "question": "Minha proposta está \"EM ANÁLISE\" — posso editar ou anexar mais documentos?",
+    "answer": "Não, enquanto o status for \"EM ANÁLISE\" o sistema trava a edição para a equipe técnica conferir o que foi enviado. Se precisar complementar algo, peça ao técnico responsável (informando o número da proposta) para devolver a proposta para ajuste — só depois disso ela volta a ficar editável.",
+    "basedOn": 792
+  },
+  {
+    "category": "Instrumentos jurídicos",
+    "question": "Qual a diferença entre Termo de Fomento e Termo de Colaboração?",
+    "answer": "Termo de Fomento: a proposta parte da própria organização da sociedade civil (OSC). Termo de Colaboração: a iniciativa é da Administração Pública, por meio de edital de chamamento público. Base legal: Lei Federal nº 13.019/2014 (MROSC).",
+    "basedOn": 1250
+  },
+  {
+    "category": "Instrumentos jurídicos",
+    "question": "Qual o prazo de prestação de contas em contrato de gestão com Serviço Social Autônomo?",
+    "answer": "O prazo é definido no próprio instrumento de contrato de gestão celebrado, conforme o Decreto nº 48.718/2023. Em geral, a prestação de contas anual deve ser apresentada em até 60 dias após o encerramento do exercício, mas confira a cláusula específica do contrato, pois pode haver prazo diferente.",
+    "basedOn": null
+  }
+]
