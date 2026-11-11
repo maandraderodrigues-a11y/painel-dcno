@@ -501,6 +501,10 @@
   }
   .chamado-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
   .chamado-id { font-size: 11px; color: var(--ink-muted); margin-left: auto; }
+  .chamado-org {
+    font-size: 11px; font-weight: 600; color: var(--accent-soft-ink);
+    background: var(--accent-soft-bg); padding: 2px 8px; border-radius: 100px;
+  }
   .chamado-subject { font-size: 13.5px; font-weight: 700; margin: 0 0 10px; line-height: 1.4; }
   .chamado-qa { display: flex; flex-direction: column; gap: 8px; }
   .chamado-qa-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 2px; }
@@ -955,8 +959,8 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
           <div>
             <strong>Protótipo com dados fictícios — não são chamados reais.</strong>
-            O backup real tem ~130 mil chamados (2,5 GB). Ao testar a extração automática, mesmo depois de remover CPF/telefone/e-mail, <strong>nomes de solicitantes continuavam aparecendo</strong> (no assunto, na assinatura do e-mail, na resposta do atendente) — não dá pra garantir isso só com regras automáticas. Por segurança, os exemplos abaixo foram escritos por mim para mostrar o formato, sem usar nenhum dado real.
-            Antes de processar a base completa, precisamos decidir juntos: quem vai poder ver esse histórico, e o que fazer com os nomes que aparecem nele. Combinado isso no chat.
+            O backup real tem ~130 mil chamados (2,5 GB). O plano agora é mostrar a <strong>instituição e o município</strong> de quem perguntou (útil e não é dado pessoal), mas remover nome, CPF, telefone e e-mail da pessoa física — inclusive em saudações, assinaturas e e-mails encaminhados, não só nos campos de formulário.
+            Ainda falta processar a base real com essa regra mais cuidadosa antes de publicar. Os exemplos abaixo foram escritos por mim, sem dado real, só para validar o formato.
           </div>
         </div>
 
@@ -1092,16 +1096,20 @@
     const q = (query || '').trim().toLowerCase();
     const filtered = CHAMADOS.filter(c => {
       if (!q) return true;
-      const haystack = (c.subject + ' ' + c.type + ' ' + c.question + ' ' + c.answer).toLowerCase();
+      const haystack = (c.subject + ' ' + c.type + ' ' + (c.institution||'') + ' ' + (c.municipio||'') + ' ' + c.question + ' ' + c.answer).toLowerCase();
       return q.split(/\s+/).filter(Boolean).every(w => haystack.includes(w));
     });
     list.innerHTML = '';
     filtered.forEach(c => {
       const card = document.createElement('div');
       card.className = 'chamado-card';
+      const orgBadge = (c.institution || c.municipio)
+        ? '<span class="chamado-org">🏛 ' + esc(c.institution || '') + (c.institution && c.municipio ? ' · ' : '') + esc(c.municipio || '') + '</span>'
+        : '';
       card.innerHTML =
         '<div class="chamado-head">' +
           '<span class="law-tag cat-decreto">' + esc(c.type) + '</span>' +
+          orgBadge +
           '<span class="chamado-id">#' + esc(c.id) + ' · ' + esc(c.date) + '</span>' +
         '</div>' +
         '<p class="chamado-subject">' + esc(c.subject) + '</p>' +
