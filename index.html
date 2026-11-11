@@ -613,7 +613,7 @@
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Capacitações
       </div>
-      <div class="nav-item" data-view="placeholder" data-title="Perguntas Frequentes" data-sub="Dúvidas recorrentes da equipe de normatização sobre parcerias e transferências voluntárias.">
+      <div class="nav-item" data-view="faq">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>
         Perguntas Frequentes
       </div>
@@ -959,8 +959,8 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
           <div>
             <strong>Protótipo com dados fictícios — não são chamados reais.</strong>
-            O backup real tem ~130 mil chamados (2,5 GB). O plano agora é mostrar a <strong>instituição e o município</strong> de quem perguntou (útil e não é dado pessoal), mas remover nome, CPF, telefone e e-mail da pessoa física — inclusive em saudações, assinaturas e e-mails encaminhados, não só nos campos de formulário.
-            Ainda falta processar a base real com essa regra mais cuidadosa antes de publicar. Os exemplos abaixo foram escritos por mim, sem dado real, só para validar o formato.
+            Os 130 mil chamados já foram processados (114 mil com resposta real, 70 mil substantivos depois de remover mensagens automáticas) e tratados — nome, CPF, telefone e e-mail da pessoa física removidos, mantendo instituição e município. Os padrões mais comuns já viraram perguntas em <strong>"Perguntas Frequentes"</strong>, que é 100% real.
+            Os chamados individuais (com instituição) ainda ficam de fora deste site público — combinamos esperar um mecanismo de acesso restrito antes de publicá-los, mesmo tratados. Os exemplos abaixo continuam fictícios, só para mostrar o formato.
           </div>
         </div>
 
@@ -973,7 +973,17 @@
         <p class="law-note" id="chamado-count"></p>
       </div>
 
-      <!-- VIEW: PLACEHOLDER (Jurisprudência, Manuais, Modelos, Pareceres, Capacitações, FAQ) -->
+      <!-- VIEW: PERGUNTAS FREQUENTES -->
+      <div class="view" id="view-faq">
+        <div class="page-head">
+          <span class="page-eyebrow">Conhecimento · Perguntas Frequentes</span>
+          <h1 class="page-title">Perguntas Frequentes</h1>
+          <p class="page-sub">Respostas sintetizadas a partir dos padrões mais comuns do histórico de atendimento do SIGCON-Saída (sem nenhum dado de chamado específico) e da legislação aplicável.</p>
+        </div>
+        <div class="faq-list" id="faq-real-list"></div>
+      </div>
+
+      <!-- VIEW: PLACEHOLDER (Jurisprudência, Manuais, Modelos, Pareceres, Capacitações) -->
       <div class="view" id="view-placeholder">
         <div class="page-head">
           <span class="page-eyebrow">Conhecimento</span>
@@ -1128,6 +1138,27 @@
     document.getElementById('chamado-count').textContent = 'Não foi possível carregar chamados_preview.json.';
   });
   document.getElementById('chamado-search').addEventListener('input', (e) => renderChamados(e.target.value));
+
+  // Perguntas Frequentes — sintetizadas a partir dos padrões mais comuns do histórico real
+  fetch('faq.json').then(r => r.json()).then(data => {
+    const list = document.getElementById('faq-real-list');
+    list.innerHTML = '';
+    data.forEach((item, i) => {
+      const el = document.createElement('div');
+      el.className = 'faq-item' + (i === 0 ? ' open' : '');
+      const basedOn = item.basedOn ? '<div class="chamado-id" style="margin-top:8px;">Baseado em ~' + esc(item.basedOn) + ' chamados semelhantes</div>' : '';
+      el.innerHTML =
+        '<div class="faq-q">' +
+          '<span><span class="law-tag cat-decreto" style="margin-right:8px;">' + esc(item.category) + '</span>' + esc(item.question) + '</span>' +
+          '<svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>' +
+        '</div>' +
+        '<div class="faq-a">' + esc(item.answer) + basedOn + '</div>';
+      list.appendChild(el);
+    });
+    list.querySelectorAll('.faq-q').forEach(q => q.addEventListener('click', () => q.parentElement.classList.toggle('open')));
+  }).catch(() => {
+    document.getElementById('faq-real-list').textContent = 'Não foi possível carregar faq.json.';
+  });
 
   document.querySelectorAll('.cat-card').forEach(card => {
     card.addEventListener('click', () => {
