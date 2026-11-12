@@ -590,6 +590,54 @@
     .exec-bar-row { grid-template-columns: 90px 1fr 70px; }
   }
 
+  /* Projetos (Gestão SCCP) */
+  .plan-tabs, .subtabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .plan-tab, .subtab {
+    font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+    padding: 8px 15px; border-radius: 100px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--ink-secondary);
+  }
+  .plan-tab:hover, .subtab:hover { background: var(--surface-2); }
+  .plan-tab.active, .subtab.active { background: var(--surface-dark); color: var(--ink-on-dark); border-color: var(--surface-dark); }
+  .subtabs { margin-bottom: 20px; }
+
+  .filters-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+  .filters-row select {
+    font-family: inherit; font-size: 13px; color: var(--ink-primary);
+    background: var(--surface-sunken); border: 1px solid var(--border);
+    border-radius: 100px; padding: 9px 14px; cursor: pointer;
+  }
+  .filters-row .search-box { flex: 1; min-width: 220px; }
+
+  .risk-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; border-radius: 100px; padding: 3px 11px; white-space: nowrap; }
+  .risk-pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .risk-baixo { background: var(--surface-sunken); color: var(--ink-secondary); }
+  .risk-baixo::before { background: var(--ink-muted); }
+  .risk-atencao { background: var(--accent-soft-bg); color: var(--accent-soft-ink); }
+  .risk-atencao::before { background: var(--accent-soft-ink); }
+  .risk-alto { background: var(--accent); color: #fff; }
+  .risk-alto::before { background: #fff; }
+  tr.area-row { cursor: pointer; }
+  tr.area-row:hover td { background: var(--surface-sunken); }
+
+  .eq-group { margin-bottom: 26px; }
+  .eq-group-title { font-size: 15px; font-weight: 800; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+  .eq-leaders { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+  .eq-leader { display: flex; gap: 14px; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 16px; background: var(--surface); }
+  .eq-avatar { flex-shrink: 0; width: 46px; height: 46px; border-radius: 50%; background: var(--surface-dark); color: var(--ink-on-dark); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; }
+  .eq-info { min-width: 0; }
+  .eq-name { font-weight: 700; font-size: 14.5px; }
+  .eq-role { font-size: 12px; color: var(--accent-soft-ink); font-weight: 600; margin: 1px 0 6px; }
+  .eq-contact { font-size: 12px; color: var(--ink-muted); display: flex; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 6px; }
+  .eq-bio { font-size: 12.5px; color: var(--ink-secondary); line-height: 1.55; margin: 0; text-align: justify; }
+  .eq-members { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+  .eq-member { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px; background: var(--surface); }
+  .eq-member .eq-name { font-size: 13px; }
+  .eq-member .eq-contact { margin-bottom: 0; font-size: 11.5px; }
+
+  .chk-list { margin: 0; padding-left: 18px; font-size: 13px; display: flex; flex-direction: column; gap: 4px; }
+  .chk-list li.done { color: var(--ink-muted); text-decoration: line-through; }
+
   .chamado-subject { font-size: 13.5px; font-weight: 700; margin: 0 0 10px; line-height: 1.4; }
   .chamado-qa { display: flex; flex-direction: column; gap: 8px; }
   .chamado-qa-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 2px; }
@@ -710,7 +758,7 @@
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
         Contratos
       </div>
-      <div class="nav-item" data-view="placeholder" data-title="Projetos (Gestão SCCP)" data-sub="Acompanhamento de projetos, prazos e riscos da SCCP — reconstrução em andamento, entra nesta mesma área restrita.">
+      <div class="nav-item" data-view="projetos">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
         Projetos
       </div>
@@ -1145,6 +1193,117 @@
           <p class="law-note" id="contratos-count"></p>
 
           <div id="contrato-detail"></div>
+        </div>
+      </div>
+
+      <!-- VIEW: PROJETOS (Gestão SCCP) -->
+      <div class="view" id="view-projetos">
+        <div class="page-head">
+          <span class="page-eyebrow">Gestão SCCP · Projetos</span>
+          <h1 class="page-title">Acompanhamento de Projetos</h1>
+          <p class="page-sub">Projetos da SCCP e da SGTE no Planner: prazos, risco por área temática, histórico de alterações e equipe.</p>
+        </div>
+
+        <div class="warn-banner">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          <div>
+            <strong>Área restrita da Gestão SCCP.</strong>
+            Dados reais de projetos, prazos, responsáveis e contatos da equipe, cifrados (AES-256) e só decifrados no seu navegador. A edição continua no artifact original (Painel SCCP) — aqui é consulta, sincronizada automaticamente. A análise de riscos por inteligência artificial do artifact original não faz parte deste espelho.
+          </div>
+        </div>
+
+        <div class="lock-gate" id="projetos-lock">
+          <div class="lock-icon">🔒</div>
+          <p class="lock-text">Esta área é restrita à Gestão SCCP (Contratos e Projetos).</p>
+          <div class="lock-form">
+            <input type="password" id="projetos-pass-input" placeholder="Senha de acesso" autocomplete="off">
+            <button class="btn-red" id="projetos-unlock-btn">Acessar</button>
+          </div>
+          <p class="lock-error" id="projetos-lock-error" style="display:none;">Senha incorreta. Tente novamente.</p>
+          <p class="lock-status" id="projetos-lock-status"></p>
+        </div>
+
+        <div id="projetos-content" style="display:none;">
+          <div class="plan-tabs" id="plano-tabs">
+            <button type="button" class="plan-tab active" data-plano="sccp">Projetos SCCP</button>
+            <button type="button" class="plan-tab" data-plano="sgte">Projetos SGTE</button>
+          </div>
+
+          <div class="subtabs" id="proj-subtabs">
+            <button type="button" class="subtab active" data-sub="visao">Visão geral</button>
+            <button type="button" class="subtab" data-sub="lista">Projetos</button>
+            <button type="button" class="subtab" data-sub="historico">Histórico de Alterações</button>
+            <button type="button" class="subtab" data-sub="equipe">Equipe</button>
+          </div>
+
+          <!-- VISÃO GERAL -->
+          <div id="proj-sub-visao">
+            <div class="kpi-row" id="proj-kpis"></div>
+            <div class="section">
+              <div class="section-head"><h2 class="section-title">Risco por área temática</h2></div>
+              <div class="dcno-tablewrap">
+                <table class="dcno-table" id="areas-table">
+                  <thead>
+                    <tr><th>Área</th><th>Risco geral</th><th class="num">Em aberto</th><th class="num">Atrasados</th><th class="num">Sem prazo</th><th class="num">Sem responsável</th></tr>
+                  </thead>
+                  <tbody id="areas-tbody"></tbody>
+                </table>
+              </div>
+              <p class="law-note">Clique numa área para ver o parecer, as recomendações e baixar o relatório (PDF/Excel) gerado na última planilha.</p>
+              <div id="area-detail"></div>
+            </div>
+          </div>
+
+          <!-- LISTA DE PROJETOS -->
+          <div id="proj-sub-lista" style="display:none;">
+            <div class="filters-row">
+              <select id="pf-diretoria"><option value="">Todas as áreas</option></select>
+              <select id="pf-situacao">
+                <option value="">Todas as situações</option>
+                <option value="atrasado">Atrasados</option>
+                <option value="aberto">Em aberto (no prazo)</option>
+                <option value="concluido">Concluídos</option>
+              </select>
+              <select id="pf-prioridade"><option value="">Todas as prioridades</option></select>
+              <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="pf-busca" placeholder="Buscar por nome, frente ou responsável…">
+              </div>
+            </div>
+            <div class="dcno-tablewrap">
+              <table class="dcno-table" id="projetos-table">
+                <thead><tr><th>Projeto</th><th>Situação</th><th>Prazo</th><th>Responsável</th><th>Áreas</th></tr></thead>
+                <tbody id="projetos-tbody"></tbody>
+              </table>
+            </div>
+            <p class="law-note" id="projetos-count"></p>
+            <div id="projeto-detail"></div>
+          </div>
+
+          <!-- HISTÓRICO DE ALTERAÇÕES -->
+          <div id="proj-sub-historico" style="display:none;">
+            <div class="filters-row">
+              <select id="hf-periodo">
+                <option value="30d">Últimos 30 dias</option>
+                <option value="7d">Últimos 7 dias</option>
+                <option value="12m">Últimos 12 meses</option>
+                <option value="tudo">Tudo</option>
+              </select>
+              <select id="hf-diretoria"><option value="">Todas as áreas</option></select>
+              <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="hf-busca" placeholder="Buscar por nome do projeto…">
+              </div>
+            </div>
+            <div class="updates-list" id="historico-list"></div>
+            <p class="law-note" id="historico-count"></p>
+          </div>
+
+          <!-- EQUIPE -->
+          <div id="proj-sub-equipe" style="display:none;">
+            <div id="equipe-body"></div>
+            <p class="law-note" id="equipe-fonte"></p>
+          </div>
         </div>
       </div>
 
@@ -1646,11 +1805,13 @@
       const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipherBytes);
       const json = new TextDecoder().decode(plainBuf);
       CONTRATOS = JSON.parse(json);
+      GESTAO_PASSWORD = password;
       document.getElementById('gestao-lock').style.display = 'none';
       document.getElementById('contratos-content').style.display = 'block';
       renderContratos();
     } catch (e) {
       statusEl.textContent = '';
+      if (document.activeElement !== document.getElementById('gestao-pass-input')) return; // tentativa automática silenciosa falhou
       errorEl.style.display = 'block';
     }
   }
@@ -1663,6 +1824,363 @@
   document.getElementById('contratos-search').addEventListener('input', (e) => {
     contratosQuery = e.target.value;
     renderContratosTabela();
+  });
+
+  // ===== Projetos (Gestão SCCP) =====
+  let PROJETOS = null; // { planos: {sccp:{...}, sgte:{...}}, equipe, org }
+  let GESTAO_PASSWORD = null; // senha em memória (não persistida), compartilhada entre Contratos e Projetos
+  let currentPlano = 'sccp';
+  let currentProjSub = 'visao';
+  let projQuery = '';
+  let projFiltros = { diretoria: '', situacao: '', prioridade: '' };
+  let histFiltros = { periodo: '30d', diretoria: '', busca: '' };
+
+  const getPlano = () => PROJETOS.planos[currentPlano];
+  const diasDesde = (iso) => {
+    if (!iso) return Infinity;
+    return Math.round((new Date() - new Date(iso + 'T00:00:00')) / 86400000);
+  };
+  function baixarArquivo(base64, filename, mime) {
+    const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+    const blob = new Blob([bytes], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  }
+  function riscoClasse(geral) {
+    const k = (geral || '').toLowerCase();
+    if (k.includes('baixo')) return 'risk-baixo';
+    if (k.includes('atenção') || k.includes('atencao') || k.includes('médio') || k.includes('medio')) return 'risk-atencao';
+    return 'risk-alto';
+  }
+
+  function renderProjKPIs() {
+    const tarefas = getPlano().tarefas;
+    const abertos = tarefas.filter(t => t.aberta).length;
+    const atrasados = tarefas.filter(t => t.aberta && t.atraso > 0).length;
+    const semPrazo = tarefas.filter(t => t.aberta && !t.prazo).length;
+    const semResp = tarefas.filter(t => t.aberta && (!t.resp || !t.resp.length)).length;
+    const concluidosRecentes = tarefas.filter(t => t.concluido && diasDesde(t.concluido) <= 30).length;
+    const kpis = [
+      { label: 'Projetos em aberto', value: abertos },
+      { label: 'Atrasados', value: atrasados },
+      { label: 'Sem prazo cadastrado', value: semPrazo },
+      { label: 'Sem responsável', value: semResp },
+      { label: 'Concluídos nos últimos 30 dias', value: concluidosRecentes },
+    ];
+    document.getElementById('proj-kpis').innerHTML = kpis.map(k => `
+      <div class="kpi-card">
+        <div class="kpi-value">${k.value}</div>
+        <div class="kpi-label">${esc(k.label)}</div>
+      </div>`).join('');
+  }
+
+  function renderAreasTabela() {
+    const av = getPlano().avaliacoes;
+    const siglas = Object.keys(av);
+    const tbody = document.getElementById('areas-tbody');
+    tbody.innerHTML = siglas.map(sig => {
+      const a = av[sig];
+      return `
+      <tr class="area-row" data-sig="${esc(sig)}">
+        <td><b>${esc(a.sigla || sig)}</b></td>
+        <td><span class="risk-pill ${riscoClasse(a.geral)}">${esc(a.geral)}</span></td>
+        <td class="num">${a.n}</td>
+        <td class="num">${a.atrasados}</td>
+        <td class="num">${a.sem_prazo}</td>
+        <td class="num">${a.sem_resp}</td>
+      </tr>`;
+    }).join('');
+    tbody.querySelectorAll('tr').forEach(tr => tr.addEventListener('click', () => openAreaDetail(tr.dataset.sig)));
+  }
+
+  function openAreaDetail(sig) {
+    const av = getPlano().avaliacoes[sig];
+    if (!av) return;
+    document.querySelectorAll('#areas-tbody tr').forEach(tr => tr.classList.toggle('selected', tr.dataset.sig === sig));
+    const html = `
+      <div class="detail-panel">
+        <div class="detail-head">
+          <div>
+            <h2>${esc(sig)}</h2>
+            <p>${esc(av.sigla || '')} · ${av.n} projeto(s) em aberto</p>
+          </div>
+          <button class="detail-close" id="area-close-btn">✕</button>
+        </div>
+        <div class="exports" style="display:flex;gap:10px;margin:4px 0 14px;">
+          ${av.pdf ? `<button type="button" class="btn-red" id="area-dl-pdf">Baixar relatório (PDF)</button>` : ''}
+          ${av.xlsx ? `<button type="button" class="btn-red" id="area-dl-xlsx">Baixar em Excel</button>` : ''}
+        </div>
+        <div class="detail-section">
+          <h3>Parecer</h3>
+          <ul class="chk-list">${(av.parecer || []).map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+        </div>
+        <div class="detail-section">
+          <h3>Recomendações</h3>
+          <ol class="chk-list">${(av.acoes || []).map(p => `<li>${esc(p)}</li>`).join('')}</ol>
+        </div>
+        <div class="detail-section">
+          <h3>Situação dos prazos</h3>
+          <div class="mini-table-wrap"><table class="mini-table">
+            <thead><tr><th>Faixa</th><th class="num">Projetos</th></tr></thead>
+            <tbody>${(av.faixas || []).map(f => `<tr><td>${esc(f[1])}</td><td class="num">${f[2]}</td></tr>`).join('')}</tbody>
+          </table></div>
+        </div>
+        <div class="detail-section">
+          <h3>Projetos por responsável</h3>
+          <div class="mini-table-wrap"><table class="mini-table">
+            <thead><tr><th>Responsável</th><th class="num">Em aberto</th><th class="num">Atrasados</th></tr></thead>
+            <tbody>${(av.resp || []).map(r => `<tr><td>${esc(r[0])}</td><td class="num">${r[1]}</td><td class="num">${r[2]}</td></tr>`).join('')}</tbody>
+          </table></div>
+        </div>
+      </div>`;
+    const container = document.getElementById('area-detail');
+    container.innerHTML = html;
+    document.getElementById('area-close-btn').addEventListener('click', () => {
+      container.innerHTML = '';
+      document.querySelectorAll('#areas-tbody tr').forEach(tr => tr.classList.remove('selected'));
+    });
+    if (av.pdf) document.getElementById('area-dl-pdf').addEventListener('click', () => baixarArquivo(av.pdf, (av.arquivo || sig) + '.pdf', 'application/pdf'));
+    if (av.xlsx) document.getElementById('area-dl-xlsx').addEventListener('click', () => baixarArquivo(av.xlsx, (av.arquivo || sig) + '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'));
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function populaFiltrosLista() {
+    const tarefas = getPlano().tarefas;
+    const dirs = new Set(), prios = new Set();
+    tarefas.forEach(t => { (t.diretorias || []).forEach(d => dirs.add(d)); if (t.prioridade) prios.add(t.prioridade); });
+    const selDir = document.getElementById('pf-diretoria');
+    selDir.innerHTML = '<option value="">Todas as áreas</option>' + [...dirs].sort().map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
+    const selPrio = document.getElementById('pf-prioridade');
+    selPrio.innerHTML = '<option value="">Todas as prioridades</option>' + [...prios].sort().map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
+    const selHistDir = document.getElementById('hf-diretoria');
+    selHistDir.innerHTML = '<option value="">Todas as áreas</option>' + [...dirs].sort().map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
+  }
+
+  function renderProjetosTabela() {
+    const q = projQuery.trim().toLowerCase();
+    const tarefas = getPlano().tarefas.filter(t => {
+      if (projFiltros.diretoria && !(t.diretorias || []).includes(projFiltros.diretoria)) return false;
+      if (projFiltros.prioridade && t.prioridade !== projFiltros.prioridade) return false;
+      if (projFiltros.situacao === 'atrasado' && !(t.aberta && t.atraso > 0)) return false;
+      if (projFiltros.situacao === 'aberto' && !(t.aberta && !(t.atraso > 0))) return false;
+      if (projFiltros.situacao === 'concluido' && t.aberta) return false;
+      if (q) {
+        const hay = [t.nome, ...(t.frentes || []), ...(t.resp || [])].join(' ').toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+    const tbody = document.getElementById('projetos-tbody');
+    tbody.innerHTML = tarefas.slice(0, 400).map(t => {
+      const sitLabel = !t.aberta ? 'Concluído' : (t.atraso > 0 ? `Atrasado (${t.atraso}d)` : 'Em aberto');
+      const sitClasse = !t.aberta ? 'risk-baixo' : (t.atraso > 0 ? 'risk-alto' : 'risk-atencao');
+      return `
+      <tr data-id="${esc(t.id)}">
+        <td>${esc(t.nome)}</td>
+        <td><span class="risk-pill ${sitClasse}">${esc(sitLabel)}</span></td>
+        <td class="mono">${t.prazo ? fmtDate(t.prazo) : '—'}</td>
+        <td>${esc((t.resp || []).map(r => r.replace(' (SEGOV)', '')).join(', ') || '—')}</td>
+        <td>${esc((t.diretorias || []).join(', ') || '—')}</td>
+      </tr>`;
+    }).join('');
+    tbody.querySelectorAll('tr').forEach(tr => tr.addEventListener('click', () => openProjetoDetail(tr.dataset.id)));
+    const total = getPlano().tarefas.length;
+    document.getElementById('projetos-count').textContent = `${tarefas.length} de ${total} projetos${tarefas.length > 400 ? ' (mostrando os 400 primeiros — refine a busca)' : ''}.`;
+  }
+
+  function openProjetoDetail(id) {
+    const plano = getPlano();
+    const t = plano.tarefas.find(x => x.id === id);
+    if (!t) return;
+    document.querySelectorAll('#projetos-tbody tr').forEach(tr => tr.classList.toggle('selected', tr.dataset.id === id));
+    const eventos = (plano.eventos || []).filter(e => e.id === id).slice(0, 30);
+    const pct = (t.chk && t.chk[1]) ? Math.round(100 * t.chk[0] / t.chk[1]) : null;
+    const html = `
+      <div class="detail-panel">
+        <div class="detail-head">
+          <div>
+            <h2>${esc(t.nome)}</h2>
+            <p>${esc(t.etapa || '')} · ${esc(t.prioridade || '')}</p>
+          </div>
+          <button class="detail-close" id="proj-close-btn">✕</button>
+        </div>
+        <div class="detail-grid">
+          <div class="dfact"><div class="k">Situação</div><div class="v">${esc(t.status || '—')}</div></div>
+          <div class="dfact"><div class="k">Criado em</div><div class="v">${t.criado ? fmtDate(t.criado) : '—'}</div></div>
+          <div class="dfact"><div class="k">Início</div><div class="v">${t.inicio ? fmtDate(t.inicio) : '—'}</div></div>
+          <div class="dfact"><div class="k">Prazo</div><div class="v">${t.prazo ? fmtDate(t.prazo) : '—'}</div></div>
+          <div class="dfact"><div class="k">Concluído em</div><div class="v">${t.concluido ? fmtDate(t.concluido) : '—'}</div></div>
+          <div class="dfact"><div class="k">Criado por</div><div class="v">${esc((t.criado_por || '—').replace(' (SEGOV)', ''))}</div></div>
+          <div class="dfact"><div class="k">Responsáveis</div><div class="v">${esc((t.resp || []).map(r => r.replace(' (SEGOV)', '')).join('; ') || '—')}</div></div>
+          <div class="dfact"><div class="k">Áreas</div><div class="v">${esc((t.diretorias || []).join(', ') || '—')}</div></div>
+          <div class="dfact"><div class="k">Frentes</div><div class="v">${esc((t.frentes || []).join(', ') || '—')}</div></div>
+        </div>
+        ${(t.motivos || []).length ? `
+        <div class="detail-section">
+          <h3>Motivos do risco</h3>
+          <ul class="chk-list">${t.motivos.map(m => `<li>${esc(m)}</li>`).join('')}</ul>
+        </div>` : ''}
+        ${(t.itens || []).length ? `
+        <div class="detail-section">
+          <h3>Itens do checklist${pct !== null ? ` — ${t.chk[0]} de ${t.chk[1]} (${pct}%)` : ''}</h3>
+          ${pct !== null ? `<div class="mini-meter"><i style="width:${pct}%;"></i></div>` : ''}
+          <ul class="chk-list">${t.itens.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+        </div>` : ''}
+        ${t.notas ? `
+        <div class="detail-section">
+          <h3>Notas</h3>
+          <p class="law-note" style="white-space:pre-wrap;">${esc(t.notas)}</p>
+        </div>` : ''}
+        ${eventos.length ? `
+        <div class="detail-section">
+          <h3>Histórico deste projeto</h3>
+          ${eventos.map(e => `<div class="hist-item"><span class="d">${esc(e.data || e.registrado || '')}</span><span>${esc(e.tipo || '')}${e.de || e.para ? ` — de "${esc(e.de || '—')}" para "${esc(e.para || '—')}"` : ''}</span></div>`).join('')}
+        </div>` : ''}
+      </div>`;
+    const container = document.getElementById('projeto-detail');
+    container.innerHTML = html;
+    document.getElementById('proj-close-btn').addEventListener('click', () => {
+      container.innerHTML = '';
+      document.querySelectorAll('#projetos-tbody tr').forEach(tr => tr.classList.remove('selected'));
+    });
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderHistorico() {
+    const plano = getPlano();
+    const agora = new Date();
+    const limites = { '7d': 7, '30d': 30, '12m': 365, 'tudo': Infinity };
+    const limiteDias = limites[histFiltros.periodo] ?? 30;
+    const q = histFiltros.busca.trim().toLowerCase();
+    let eventos = (plano.eventos || []).filter(e => {
+      const refData = e.registrado || e.data;
+      if (limiteDias !== Infinity && diasDesde(refData) > limiteDias) return false;
+      if (histFiltros.diretoria && !(e.diretorias || []).includes(histFiltros.diretoria)) return false;
+      if (q && !(e.nome || '').toLowerCase().includes(q)) return false;
+      return true;
+    });
+    eventos.sort((a, b) => (b.registrado || b.data || '').localeCompare(a.registrado || a.data || ''));
+    const total = eventos.length;
+    eventos = eventos.slice(0, 300);
+    const tipoLabel = { criado: 'Criado', concluido: 'Concluído', movido: 'Mudou de etapa', prazo: 'Mudou o prazo', reaberto: 'Reaberto', removido: 'Removido' };
+    document.getElementById('historico-list').innerHTML = eventos.length ? eventos.map(e => `
+      <div class="update-row">
+        <span class="update-tag man">${esc(tipoLabel[e.tipo] || e.tipo || '—')}</span>
+        <div class="update-body">
+          <p class="update-title">${esc(e.nome || '—')}</p>
+          <p class="update-desc">${esc(e.data || e.registrado || '')}${e.de || e.para ? ` · de "${esc(e.de || '—')}" para "${esc(e.para || '—')}"` : ''}${(e.diretorias || []).length ? ` · ${esc(e.diretorias.join(', '))}` : ''}</p>
+        </div>
+      </div>`).join('') : '<p class="law-note">Nenhuma alteração encontrada com esses filtros.</p>';
+    document.getElementById('historico-count').textContent = `${Math.min(total, 300)} de ${total} alteração(ões)${total > 300 ? ' (mostrando as 300 mais recentes — refine o período ou a busca)' : ''}.`;
+  }
+
+  function renderEquipe() {
+    const eq = PROJETOS.equipe;
+    document.getElementById('equipe-body').innerHTML = eq.grupos.map(g => {
+      const iniciais = (nome) => nome.split(' ').filter(Boolean).slice(0, 2).map(p => p[0]).join('').toUpperCase();
+      const contato = (p) => [p.email, p.tel, p.ramal ? 'ramal ' + p.ramal : '', p.aniv ? 'aniversário ' + p.aniv : ''].filter(Boolean).join(' · ');
+      return `
+      <div class="eq-group">
+        <h3 class="eq-group-title">${esc(g.titulo)}</h3>
+        <div class="eq-leaders">
+          ${(g.perfis || []).map(p => `
+            <div class="eq-leader">
+              <div class="eq-avatar">${esc(iniciais(p.nome))}</div>
+              <div class="eq-info">
+                <div class="eq-name">${esc(p.nome)}</div>
+                ${p.cargo ? `<div class="eq-role">${esc(p.cargo)}</div>` : ''}
+                <div class="eq-contact">${esc(contato(p))}</div>
+                ${p.bio ? `<p class="eq-bio">${esc(p.bio)}</p>` : ''}
+              </div>
+            </div>`).join('')}
+        </div>
+        ${(g.equipe || []).length ? `
+        <div class="eq-members">
+          ${g.equipe.map(p => `
+            <div class="eq-member">
+              <div class="eq-name">${esc(p.nome)}</div>
+              <div class="eq-contact">${esc(contato(p))}</div>
+            </div>`).join('')}
+        </div>` : ''}
+      </div>`;
+    }).join('');
+    document.getElementById('equipe-fonte').textContent = eq.fonte ? `Fonte: ${eq.fonte}${eq.consultado ? ' (consultado em ' + fmtDate(eq.consultado) + ')' : ''}` : '';
+  }
+
+  function renderProjSub() {
+    ['visao', 'lista', 'historico', 'equipe'].forEach(s => {
+      document.getElementById('proj-sub-' + s).style.display = (s === currentProjSub) ? 'block' : 'none';
+    });
+    document.querySelectorAll('#proj-subtabs .subtab').forEach(b => b.classList.toggle('active', b.dataset.sub === currentProjSub));
+    if (currentProjSub === 'visao') { renderProjKPIs(); renderAreasTabela(); document.getElementById('area-detail').innerHTML = ''; }
+    else if (currentProjSub === 'lista') { populaFiltrosLista(); renderProjetosTabela(); document.getElementById('projeto-detail').innerHTML = ''; }
+    else if (currentProjSub === 'historico') { populaFiltrosLista(); renderHistorico(); }
+    else if (currentProjSub === 'equipe') { renderEquipe(); }
+  }
+
+  document.querySelectorAll('#proj-subtabs .subtab').forEach(btn => {
+    btn.addEventListener('click', () => { currentProjSub = btn.dataset.sub; renderProjSub(); });
+  });
+  document.querySelectorAll('#plano-tabs .plan-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentPlano = btn.dataset.plano;
+      document.querySelectorAll('#plano-tabs .plan-tab').forEach(b => b.classList.toggle('active', b === btn));
+      projFiltros = { diretoria: '', situacao: '', prioridade: '' };
+      projQuery = '';
+      document.getElementById('pf-busca').value = '';
+      renderProjSub();
+    });
+  });
+  document.getElementById('pf-diretoria').addEventListener('change', (e) => { projFiltros.diretoria = e.target.value; renderProjetosTabela(); });
+  document.getElementById('pf-situacao').addEventListener('change', (e) => { projFiltros.situacao = e.target.value; renderProjetosTabela(); });
+  document.getElementById('pf-prioridade').addEventListener('change', (e) => { projFiltros.prioridade = e.target.value; renderProjetosTabela(); });
+  document.getElementById('pf-busca').addEventListener('input', (e) => { projQuery = e.target.value; renderProjetosTabela(); });
+  document.getElementById('hf-periodo').addEventListener('change', (e) => { histFiltros.periodo = e.target.value; renderHistorico(); });
+  document.getElementById('hf-diretoria').addEventListener('change', (e) => { histFiltros.diretoria = e.target.value; renderHistorico(); });
+  document.getElementById('hf-busca').addEventListener('input', (e) => { histFiltros.busca = e.target.value; renderHistorico(); });
+
+  async function tryUnlockProjetos(password) {
+    const statusEl = document.getElementById('projetos-lock-status');
+    const errorEl = document.getElementById('projetos-lock-error');
+    errorEl.style.display = 'none';
+    statusEl.textContent = 'Carregando e decifrando…';
+    try {
+      const payload = await fetch('projetos_encrypted.json').then(r => r.json());
+      const key = await deriveKey(password, payload.salt, payload.iterations);
+      const iv = b64ToBytes(payload.iv);
+      const cipherBytes = b64ToBytes(payload.ciphertext);
+      const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipherBytes);
+      const json = new TextDecoder().decode(plainBuf);
+      PROJETOS = JSON.parse(json);
+      GESTAO_PASSWORD = password;
+      document.getElementById('projetos-lock').style.display = 'none';
+      document.getElementById('projetos-content').style.display = 'block';
+      renderProjSub();
+    } catch (e) {
+      statusEl.textContent = '';
+      if (document.activeElement !== document.getElementById('projetos-pass-input')) return; // tentativa automática silenciosa falhou
+      errorEl.style.display = 'block';
+    }
+  }
+  document.getElementById('projetos-unlock-btn').addEventListener('click', () => {
+    tryUnlockProjetos(document.getElementById('projetos-pass-input').value);
+  });
+  document.getElementById('projetos-pass-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryUnlockProjetos(e.target.value);
+  });
+
+  // Desbloqueio compartilhado: Contratos e Projetos usam a mesma senha da "Gestão SCCP".
+  // Ao abrir uma dessas duas views já com a senha em memória (desbloqueada pela outra),
+  // tenta decifrar direto, sem pedir a senha de novo.
+  document.querySelectorAll('.nav-item[data-view="contratos"], .nav-item[data-view="projetos"]').forEach(item => {
+    item.addEventListener('click', () => {
+      if (!GESTAO_PASSWORD) return;
+      if (item.dataset.view === 'contratos' && !CONTRATOS) tryUnlockGestao(GESTAO_PASSWORD);
+      if (item.dataset.view === 'projetos' && !PROJETOS) tryUnlockProjetos(GESTAO_PASSWORD);
+    });
   });
 
   // Perguntas Frequentes — sintetizadas a partir dos padrões mais comuns do histórico real
