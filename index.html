@@ -605,9 +605,9 @@
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7h6M9 11h6M9 15h3"/></svg>
         Legislação <span class="count">47</span>
       </div>
-      <div class="nav-item" data-view="placeholder" data-title="Jurisprudência" data-sub="Acórdãos do TCEMG, TCU, STF e STJ aplicáveis a convênios, termos de fomento/colaboração, acordos de cooperação e contratos de gestão.">
+      <div class="nav-item" data-view="jurisprudencia">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 3 7v2a9 9 0 0 0 18 0V7z"/><path d="M12 11v6"/></svg>
-        Jurisprudência <span class="count">18</span>
+        Jurisprudência <span class="count">565</span>
       </div>
       <div class="nav-item" data-view="placeholder" data-title="Manuais e Cartilhas" data-sub="Manuais oficiais elaborados pela DCNO sobre as legislações de parcerias, conforme o inciso III do art. 12.">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
@@ -1014,7 +1014,63 @@
         <div class="faq-list" id="faq-real-list"></div>
       </div>
 
-      <!-- VIEW: PLACEHOLDER (Jurisprudência, Manuais, Modelos, Pareceres, Capacitações) -->
+      <!-- VIEW: JURISPRUDÊNCIA -->
+      <div class="view" id="view-jurisprudencia">
+        <div class="page-head">
+          <span class="page-eyebrow">Conhecimento · Jurisprudência</span>
+          <h1 class="page-title">Catálogo de Jurisprudências</h1>
+          <p class="page-sub">Decisões do STF, STJ, TCU e Tribunais de Contas estaduais sobre convênios, parcerias e contratos de gestão.</p>
+        </div>
+
+        <div class="source-banner">
+          <div class="source-banner-text">
+            <p class="source-banner-title">Fonte oficial: Catálogo de Jurisprudências da DCNO/SCCP</p>
+            <p class="source-banner-desc">Material elaborado pela própria DCNO, com atualização mensal. O conteúdo aqui é o entendimento conciso das decisões — a leitura do inteiro teor é fundamental para aprofundar a situação.</p>
+          </div>
+          <a class="btn-red" href="https://jurisprudencia.sigconsaida.mg.gov.br/" target="_blank" rel="noopener">
+            Abrir catálogo completo
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M7 17 17 7M8 7h9v9"/></svg>
+          </a>
+        </div>
+
+        <div class="search-box" style="max-width:none; margin-bottom:14px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Buscar por tribunal, tema ou palavra da decisão…" id="juris-search">
+        </div>
+
+        <div class="cat-grid" id="juris-filters">
+          <div class="cat-card active" data-cat="all">
+            <div class="cat-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 3 7v2a9 9 0 0 0 18 0V7z"/><path d="M12 11v6"/></svg></div>
+            <div class="cat-label">Todas</div>
+            <div class="cat-count" data-count-for="all"></div>
+          </div>
+          <div class="cat-card" data-cat="Destaques">
+            <div class="cat-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 2 2.6 6.6L21 10l-5 4.2L17.5 21 12 17.3 6.5 21 8 14.2 3 10l6.4-1.4z"/></svg></div>
+            <div class="cat-label">Destaques</div>
+            <div class="cat-count" data-count-for="Destaques"></div>
+          </div>
+          <div class="cat-card" data-cat="Celebração">
+            <div class="cat-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+            <div class="cat-label">Celebração</div>
+            <div class="cat-count" data-count-for="Celebração"></div>
+          </div>
+          <div class="cat-card" data-cat="Execução">
+            <div class="cat-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg></div>
+            <div class="cat-label">Execução</div>
+            <div class="cat-count" data-count-for="Execução"></div>
+          </div>
+          <div class="cat-card" data-cat="Prestação de Contas">
+            <div class="cat-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="m8 15 2.5 2.5L16 12"/></svg></div>
+            <div class="cat-label">Prestação de Contas</div>
+            <div class="cat-count" data-count-for="Prestação de Contas"></div>
+          </div>
+        </div>
+
+        <div class="law-grid" id="juris-list"></div>
+        <p class="law-note" id="juris-count"></p>
+      </div>
+
+      <!-- VIEW: PLACEHOLDER (Manuais, Modelos, Pareceres, Capacitações) -->
       <div class="view" id="view-placeholder">
         <div class="page-head">
           <span class="page-eyebrow">Conhecimento</span>
@@ -1111,7 +1167,7 @@
   }
 
   function updateCatCounts() {
-    document.querySelectorAll('.cat-count').forEach(el => {
+    document.querySelectorAll('#law-filters .cat-count').forEach(el => {
       const cat = el.dataset.countFor;
       const n = cat === 'all' ? LAWS.length : LAWS.filter(l => l.cat === cat).length;
       el.textContent = n + (n === 1 ? ' norma' : ' normas');
@@ -1228,9 +1284,74 @@
     document.getElementById('faq-real-list').textContent = 'Não foi possível carregar faq.json.';
   });
 
-  document.querySelectorAll('.cat-card').forEach(card => {
+  // Jurisprudência — extraída do catálogo oficial da DCNO (GitBook)
+  let JURIS = [];
+  let currentJurisCat = 'all';
+  let currentJurisQuery = '';
+  const JURIS_TAG_CLASS = { STF: 'cat-federal', STJ: 'cat-federal', TCU: 'cat-estadual' };
+  function jurisTagClass(tribunal) { return JURIS_TAG_CLASS[tribunal] || 'cat-decreto'; }
+
+  function updateJurisCatCounts() {
+    document.querySelectorAll('#juris-filters .cat-count').forEach(el => {
+      const cat = el.dataset.countFor;
+      const n = cat === 'all' ? JURIS.length : JURIS.filter(j => j.category === cat).length;
+      el.textContent = n + (n === 1 ? ' decisão' : ' decisões');
+    });
+  }
+
+  function renderJuris() {
+    const list = document.getElementById('juris-list');
+    const countEl = document.getElementById('juris-count');
+    const q = currentJurisQuery.trim().toLowerCase();
+    const filtered = JURIS.filter(j => {
+      if (currentJurisCat !== 'all' && j.category !== currentJurisCat) return false;
+      if (!q) return true;
+      const haystack = (j.tribunal + ' ' + j.holding + ' ' + j.citation + ' ' + j.body).toLowerCase();
+      return q.split(/\s+/).filter(Boolean).every(w => haystack.includes(w));
+    });
+    list.innerHTML = '';
+    filtered.slice(0, 300).forEach(j => {
+      const card = document.createElement('a');
+      card.className = 'law-card';
+      card.href = j.url || 'https://jurisprudencia.sigconsaida.mg.gov.br/';
+      card.target = '_blank';
+      card.rel = 'noopener';
+      card.innerHTML =
+        '<span class="law-tag ' + jurisTagClass(j.tribunal) + '">' + esc(j.tribunal) + '</span>' +
+        '<p class="law-title">' + esc(j.holding) + '</p>' +
+        '<div class="law-meta">' + esc(j.citation) + (j.date ? ' · ' + esc(j.date) : '') + '</div>' +
+        '<span class="law-link">Ver decisão ↗</span>';
+      list.appendChild(card);
+    });
+    const shown = Math.min(filtered.length, 300);
+    countEl.textContent = shown + ' de ' + filtered.length + ' decisões filtradas (' + JURIS.length + ' no total).';
+  }
+
+  fetch('jurisprudencia.json').then(r => r.json()).then(data => {
+    JURIS = data;
+    updateJurisCatCounts();
+    renderJuris();
+  }).catch(() => {
+    document.getElementById('juris-count').textContent = 'Não foi possível carregar jurisprudencia.json.';
+  });
+
+  document.querySelectorAll('#juris-filters .cat-card').forEach(card => {
     card.addEventListener('click', () => {
-      document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('#juris-filters .cat-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      currentJurisCat = card.dataset.cat;
+      renderJuris();
+      document.getElementById('juris-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  document.getElementById('juris-search').addEventListener('input', (e) => {
+    currentJurisQuery = e.target.value;
+    renderJuris();
+  });
+
+  document.querySelectorAll('#law-filters .cat-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('#law-filters .cat-card').forEach(c => c.classList.remove('active'));
       card.classList.add('active');
       currentCat = card.dataset.cat;
       renderLaws();
