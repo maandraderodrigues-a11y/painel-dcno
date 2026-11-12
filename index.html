@@ -525,6 +525,71 @@
   .lock-form input:focus { outline: none; border-color: var(--accent); }
   .lock-error { font-size: 12.5px; color: var(--accent); font-weight: 600; margin: 0; }
   .lock-status { font-size: 11.5px; color: var(--ink-muted); margin: 0; }
+
+  /* Contratos (Gestão SCCP) */
+  .dcno-tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); box-shadow: var(--shadow-sm); }
+  .dcno-table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 760px; }
+  .dcno-table th {
+    text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
+    color: var(--ink-muted); padding: 10px 14px; border-bottom: 1px solid var(--border-strong); white-space: nowrap;
+  }
+  .dcno-table th.num, .dcno-table td.num { text-align: right; }
+  .dcno-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .dcno-table tbody tr { cursor: pointer; }
+  .dcno-table tbody tr:hover td { background: var(--surface-2); }
+  .dcno-table tbody tr.selected td { background: var(--accent-soft-bg); }
+  .dcno-table .contrato-id { font-weight: 700; }
+  .dcno-table .mono { font-variant-numeric: tabular-nums; }
+  .status-pill { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 100px; white-space: nowrap; }
+  .status-andamento { background: var(--surface-sunken); color: var(--ink-secondary); }
+  .status-finalizado { background: var(--surface-sunken); color: var(--ink-muted); }
+  .status-suspenso, .status-iniciar { background: var(--accent-soft-bg); color: var(--accent-soft-ink); }
+  .mini-meter { height: 6px; border-radius: 3px; background: var(--surface-sunken); overflow: hidden; margin-top: 4px; width: 90px; }
+  .mini-meter i { display: block; height: 100%; background: var(--accent); }
+
+  .alert-row { border-left: 3px solid var(--border-strong); }
+  .alert-row.sev-urgente { border-left-color: var(--accent); }
+  .alert-row.sev-atencao { border-left-color: var(--ink-secondary); }
+  .alert-row .update-tag.sev-urgente { background: var(--accent); color: #fff; }
+  .alert-row .update-tag.sev-atencao { background: var(--surface-dark); color: var(--ink-on-dark); }
+  .alert-row .update-tag.sev-info { background: var(--surface-sunken); color: var(--ink-secondary); }
+
+  .detail-panel {
+    margin-top: 18px; background: var(--surface); border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg); padding: 20px 22px; box-shadow: var(--shadow-md);
+  }
+  .detail-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 14px; flex-wrap: wrap; }
+  .detail-head h2 { font-size: 17px; font-weight: 800; margin: 0 0 4px; }
+  .detail-head p { margin: 0; font-size: 12.5px; color: var(--ink-muted); }
+  .detail-close { border: 1px solid var(--border-strong); background: var(--surface-sunken); border-radius: 8px; width: 32px; height: 32px; cursor: pointer; color: var(--ink-secondary); flex-shrink: 0; }
+  .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 18px; }
+  .dfact { display: flex; flex-direction: column; gap: 2px; }
+  .dfact .k { font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink-muted); }
+  .dfact .v { font-size: 13.5px; font-weight: 600; color: var(--ink-primary); }
+  .dfact .v.mono { font-variant-numeric: tabular-nums; }
+  .detail-section { margin-bottom: 18px; }
+  .detail-section h3 { font-size: 12.5px; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink-muted); margin: 0 0 8px; }
+  .detail-section:last-child { margin-bottom: 0; }
+  .exec-bars { display: flex; flex-direction: column; gap: 8px; }
+  .exec-bar-row { display: grid; grid-template-columns: 110px 1fr 90px; gap: 10px; align-items: center; font-size: 12.5px; }
+  .exec-bar-row .track { height: 10px; border-radius: 5px; background: var(--surface-sunken); overflow: hidden; }
+  .exec-bar-row .track i { display: block; height: 100%; }
+  .exec-bar-row .val { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-secondary); }
+  .mini-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .mini-table th { text-align: left; font-size: 10.5px; color: var(--ink-muted); font-weight: 700; padding: 5px 8px; border-bottom: 1px solid var(--border-strong); }
+  .mini-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  .mini-table th.num, .mini-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .mini-table-wrap { max-height: 220px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+  .pend-item { background: var(--accent-soft-bg); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12.5px; margin-bottom: 6px; }
+  .pend-item b { display: block; color: var(--accent-soft-ink); margin-bottom: 2px; }
+  .hist-item { display: flex; gap: 10px; font-size: 12.5px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .hist-item:last-child { border-bottom: none; }
+  .hist-item .d { color: var(--ink-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  @media (max-width: 720px) {
+    .detail-grid { grid-template-columns: 1fr 1fr; }
+    .exec-bar-row { grid-template-columns: 90px 1fr 70px; }
+  }
+
   .chamado-subject { font-size: 13.5px; font-weight: 700; margin: 0 0 10px; line-height: 1.4; }
   .chamado-qa { display: flex; flex-direction: column; gap: 8px; }
   .chamado-qa-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 2px; }
@@ -636,6 +701,18 @@
       <div class="nav-item" data-view="faq">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>
         Perguntas Frequentes
+      </div>
+    </nav>
+
+    <nav class="nav-group">
+      <div class="nav-label">Gestão SCCP <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-left:3px;vertical-align:-1px;"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <div class="nav-item" data-view="contratos">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
+        Contratos
+      </div>
+      <div class="nav-item" data-view="placeholder" data-title="Projetos (Gestão SCCP)" data-sub="Acompanhamento de projetos, prazos e riscos da SCCP — reconstrução em andamento, entra nesta mesma área restrita.">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        Projetos
       </div>
     </nav>
 
@@ -1014,6 +1091,63 @@
         <div class="faq-list" id="faq-real-list"></div>
       </div>
 
+      <!-- VIEW: CONTRATOS (Gestão SCCP) -->
+      <div class="view" id="view-contratos">
+        <div class="page-head">
+          <span class="page-eyebrow">Gestão SCCP · Contratos</span>
+          <h1 class="page-title">Controle de Contratos</h1>
+          <p class="page-sub">Processos SEI, vigências, gestores e fiscais, execução orçamentária e alertas dos contratos da SCCP.</p>
+        </div>
+
+        <div class="warn-banner">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          <div>
+            <strong>Área restrita da Gestão SCCP.</strong>
+            Dados reais de contratos, valores e responsáveis, cifrados (AES-256) e só decifrados no seu navegador. A edição continua no artifact original do Controle de Contratos — aqui é consulta, sincronizada automaticamente.
+          </div>
+        </div>
+
+        <div class="lock-gate" id="gestao-lock">
+          <div class="lock-icon">🔒</div>
+          <p class="lock-text">Esta área é restrita à Gestão SCCP (Contratos e Projetos).</p>
+          <div class="lock-form">
+            <input type="password" id="gestao-pass-input" placeholder="Senha de acesso" autocomplete="off">
+            <button class="btn-red" id="gestao-unlock-btn">Acessar</button>
+          </div>
+          <p class="lock-error" id="gestao-lock-error" style="display:none;">Senha incorreta. Tente novamente.</p>
+          <p class="lock-status" id="gestao-lock-status"></p>
+        </div>
+
+        <div id="contratos-content" style="display:none;">
+          <div class="kpi-row" id="contratos-kpis"></div>
+
+          <div class="section">
+            <div class="section-head"><h2 class="section-title">Atenção agora</h2></div>
+            <div id="contratos-alerts" class="updates-list"></div>
+          </div>
+
+          <div class="search-box" style="max-width:none; margin-bottom:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" placeholder="Buscar por contrato, contratada, gestor ou fiscal…" id="contratos-search">
+          </div>
+
+          <div class="dcno-tablewrap">
+            <table class="dcno-table" id="contratos-table">
+              <thead>
+                <tr>
+                  <th>Contrato</th><th>Contratada</th><th>Status</th><th>Vigência até</th>
+                  <th>Gestor</th><th class="num">Valor total</th><th class="num">Executado</th>
+                </tr>
+              </thead>
+              <tbody id="contratos-tbody"></tbody>
+            </table>
+          </div>
+          <p class="law-note" id="contratos-count"></p>
+
+          <div id="contrato-detail"></div>
+        </div>
+      </div>
+
       <!-- VIEW: JURISPRUDÊNCIA -->
       <div class="view" id="view-jurisprudencia">
         <div class="page-head">
@@ -1261,6 +1395,274 @@
   });
   document.getElementById('chamado-pass-input').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') tryUnlockChamados(e.target.value);
+  });
+
+  // ===== Contratos (Gestão SCCP) =====
+  let CONTRATOS = null; // { processos, movimentos, pagamentos, historico }
+  let contratosQuery = '';
+  const fmtMoney = (v) => (v == null ? '—' : 'R$ ' + Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+  const fmtDate = (iso) => {
+    if (!iso) return '—';
+    const [y, m, d] = iso.split('-');
+    return d && m && y ? `${d}/${m}/${y}` : iso;
+  };
+  const daysUntil = (iso) => {
+    if (!iso) return null;
+    const target = new Date(iso + 'T00:00:00');
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    return Math.round((target - now) / 86400000);
+  };
+  const statusClass = (s) => {
+    const k = (s || '').toLowerCase();
+    if (k.includes('final')) return 'status-finalizado';
+    if (k.includes('suspens')) return 'status-suspenso';
+    if (k.includes('iniciar')) return 'status-iniciar';
+    return 'status-andamento';
+  };
+
+  function computeAlertas(processos) {
+    const alerts = [];
+    const seiCount = {};
+    processos.forEach(p => { if (p.sei) seiCount[p.sei] = (seiCount[p.sei] || 0) + 1; });
+
+    processos.forEach(p => {
+      const nome = p.contrato ? 'Contrato ' + p.contrato : (p.instrumento || p.id);
+      const dias = daysUntil(p.fim);
+      const naoFinalizado = !(p.status || '').toLowerCase().includes('final');
+
+      if (dias !== null && dias < 0 && naoFinalizado) {
+        alerts.push({ sev: 'urgente', titulo: nome + ' — vigência encerrada', detalhe: `Venceu em ${fmtDate(p.fim)} e ainda consta "${p.status}".`, id: p.id });
+      } else if (dias !== null && dias >= 0 && dias <= 30 && naoFinalizado) {
+        alerts.push({ sev: 'urgente', titulo: nome + ' — vigência vence em ' + dias + ' dia(s)', detalhe: `Termina em ${fmtDate(p.fim)}.`, id: p.id });
+      } else if (dias !== null && dias <= 90 && naoFinalizado) {
+        alerts.push({ sev: 'atencao', titulo: nome + ' — vigência vence em até 90 dias', detalhe: `Termina em ${fmtDate(p.fim)}.`, id: p.id });
+      } else if (dias !== null && dias <= 180 && naoFinalizado) {
+        alerts.push({ sev: 'info', titulo: nome + ' — acompanhar vigência', detalhe: `Termina em ${fmtDate(p.fim)} (até 180 dias).`, id: p.id });
+      }
+
+      if (!p.inicio) alerts.push({ sev: 'atencao', titulo: nome + ' — sem data de início cadastrada', detalhe: 'Campo "início" vazio.', id: p.id });
+      if (p.valorTotal == null) alerts.push({ sev: 'atencao', titulo: nome + ' — sem valor total cadastrado', detalhe: 'Campo "valor total" vazio.', id: p.id });
+      if (!p.gestor) alerts.push({ sev: 'atencao', titulo: nome + ' — sem gestor cadastrado', detalhe: '', id: p.id });
+      if (!p.fiscal) alerts.push({ sev: 'atencao', titulo: nome + ' — sem fiscal cadastrado', detalhe: '', id: p.id });
+      if (p.sei && seiCount[p.sei] > 1) alerts.push({ sev: 'info', titulo: nome + ' — SEI repetido em outro contrato', detalhe: p.sei, id: p.id });
+
+      const ex = p.exec || {};
+      if (ex.contratado && ex.empenhado != null && ex.contratado > 0 && (ex.empenhado / ex.contratado) > 0.8) {
+        alerts.push({ sev: 'info', titulo: nome + ' — mais de 80% do saldo empenhado', detalhe: `${(100 * ex.empenhado / ex.contratado).toFixed(0)}% já empenhado.`, id: p.id });
+      }
+
+      (p.pendencias || []).forEach(pd => {
+        alerts.push({ sev: pd.sev === 'urgente' ? 'urgente' : (pd.sev === 'atencao' ? 'atencao' : 'info'), titulo: nome + ' — ' + pd.titulo, detalhe: pd.detalhe || '', id: p.id });
+      });
+    });
+
+    const order = { urgente: 0, atencao: 1, info: 2 };
+    alerts.sort((a, b) => order[a.sev] - order[b.sev]);
+    return alerts;
+  }
+
+  function renderContratosKPIs() {
+    const procs = CONTRATOS.processos;
+    const totalContratado = procs.reduce((s, p) => s + (p.valorTotal || p.exec?.contratado || 0), 0);
+    const totalEmpenhado = procs.reduce((s, p) => s + (p.exec?.empenhado || 0), 0);
+    const totalLiquidado = procs.reduce((s, p) => s + (p.exec?.liquidado || 0), 0);
+    const ativos = procs.filter(p => (p.status || '').toLowerCase().includes('andamento')).length;
+    const kpis = [
+      { label: 'Contratos ativos', value: ativos + ' / ' + procs.length },
+      { label: 'Total contratado', value: fmtMoney(totalContratado) },
+      { label: 'Total empenhado', value: fmtMoney(totalEmpenhado) },
+      { label: 'Total liquidado', value: fmtMoney(totalLiquidado) },
+    ];
+    const row = document.getElementById('contratos-kpis');
+    row.innerHTML = kpis.map(k => `
+      <div class="kpi-card">
+        <div class="kpi-value" style="font-size:19px;">${esc(k.value)}</div>
+        <div class="kpi-label">${esc(k.label)}</div>
+      </div>`).join('');
+  }
+
+  function renderContratosAlertas() {
+    const alerts = computeAlertas(CONTRATOS.processos);
+    const box = document.getElementById('contratos-alerts');
+    if (!alerts.length) { box.innerHTML = '<p class="law-note">Nenhum alerta no momento.</p>'; return; }
+    const sevLabel = { urgente: 'Urgente', atencao: 'Atenção', info: 'Acompanhar' };
+    box.innerHTML = alerts.slice(0, 30).map(a => `
+      <div class="update-row alert-row sev-${a.sev}">
+        <span class="update-tag sev-${a.sev}">${sevLabel[a.sev]}</span>
+        <div class="update-body">
+          <p class="update-title">${esc(a.titulo)}</p>
+          ${a.detalhe ? `<p class="update-desc">${esc(a.detalhe)}</p>` : ''}
+        </div>
+      </div>`).join('');
+  }
+
+  function renderContratosTabela() {
+    const q = contratosQuery.trim().toLowerCase();
+    const procs = CONTRATOS.processos.filter(p => {
+      if (!q) return true;
+      const hay = [p.contrato, p.contratada, p.gestor, p.fiscal, p.sei, p.instrumento].filter(Boolean).join(' ').toLowerCase();
+      return hay.includes(q);
+    });
+    const tbody = document.getElementById('contratos-tbody');
+    tbody.innerHTML = procs.map(p => {
+      const ex = p.exec || {};
+      const valor = p.valorTotal || ex.contratado || 0;
+      const pct = valor ? Math.min(100, Math.round(100 * (ex.empenhado || 0) / valor)) : 0;
+      return `
+      <tr data-id="${esc(p.id)}">
+        <td class="contrato-id">${esc(p.contrato || p.instrumento || p.id)}</td>
+        <td>${esc((p.contratada || '').split(' ').slice(0, 4).join(' '))}</td>
+        <td><span class="status-pill ${statusClass(p.status)}">${esc(p.status || '—')}</span></td>
+        <td class="mono">${fmtDate(p.fim)}</td>
+        <td>${esc((p.gestor || '—').split(' ').slice(0, 2).join(' '))}</td>
+        <td class="num mono">${fmtMoney(valor)}</td>
+        <td class="num">
+          ${pct}%
+          <div class="mini-meter"><i style="width:${pct}%;"></i></div>
+        </td>
+      </tr>`;
+    }).join('');
+    tbody.querySelectorAll('tr').forEach(tr => tr.addEventListener('click', () => openContratoDetail(tr.dataset.id)));
+    document.getElementById('contratos-count').textContent = procs.length + ' de ' + CONTRATOS.processos.length + ' contratos.';
+  }
+
+  function openContratoDetail(id) {
+    const p = CONTRATOS.processos.find(x => x.id === id);
+    if (!p) return;
+    document.querySelectorAll('#contratos-tbody tr').forEach(tr => tr.classList.toggle('selected', tr.dataset.id === id));
+    const ex = p.exec || {};
+    const valor = p.valorTotal || ex.contratado || 0;
+    const bars = [
+      { label: 'Contratado', val: ex.contratado, max: valor, color: 'var(--ink-primary)' },
+      { label: 'Empenhado', val: ex.empenhado, max: valor, color: 'var(--accent)' },
+      { label: 'Liquidado', val: ex.liquidado, max: valor, color: 'var(--ink-secondary)' },
+    ];
+    const movs = (CONTRATOS.movimentos[id] || []).slice(0, 60);
+    const pags = CONTRATOS.pagamentos.filter(pg => pg.processoId === id);
+    const hist = CONTRATOS.historico.filter(h => h.processoId === id);
+
+    const html = `
+      <div class="detail-panel">
+        <div class="detail-head">
+          <div>
+            <h2>${esc(p.contratada || p.instrumento)}</h2>
+            <p>${esc(p.objeto || '')}</p>
+          </div>
+          <button class="detail-close" id="detail-close-btn">✕</button>
+        </div>
+
+        <div class="detail-grid">
+          <div class="dfact"><div class="k">Contrato</div><div class="v">${esc(p.contrato || p.instrumento || '—')}</div></div>
+          <div class="dfact"><div class="k">SEI</div><div class="v mono">${esc(p.sei || '—')}</div></div>
+          <div class="dfact"><div class="k">Status</div><div class="v"><span class="status-pill ${statusClass(p.status)}">${esc(p.status || '—')}</span></div></div>
+          <div class="dfact"><div class="k">Vigência</div><div class="v">${fmtDate(p.inicio)} – ${fmtDate(p.fim)}</div></div>
+          <div class="dfact"><div class="k">Gestor titular</div><div class="v">${esc(p.gestor || '—')}</div></div>
+          <div class="dfact"><div class="k">Gestor suplente</div><div class="v">${esc(p.gestorSuplente || '—')}</div></div>
+          <div class="dfact"><div class="k">Fiscal titular</div><div class="v">${esc(p.fiscal || '—')}</div></div>
+          <div class="dfact"><div class="k">Fiscal suplente</div><div class="v">${esc(p.fiscalSuplente || '—')}</div></div>
+          <div class="dfact"><div class="k">CNPJ</div><div class="v mono">${esc(p.cnpj || '—')}</div></div>
+          <div class="dfact"><div class="k">Categoria</div><div class="v">${esc(p.categoria || '—')}</div></div>
+          <div class="dfact"><div class="k">Valor total</div><div class="v mono">${fmtMoney(valor)}</div></div>
+          <div class="dfact"><div class="k">Processo de compras</div><div class="v">${esc(p.procCompras || '—')}</div></div>
+        </div>
+
+        ${(p.pendencias || []).length ? `
+        <div class="detail-section">
+          <h3>Pendências</h3>
+          ${p.pendencias.map(pd => `<div class="pend-item"><b>${esc(pd.titulo)}</b>${esc(pd.detalhe || '')}</div>`).join('')}
+        </div>` : ''}
+
+        <div class="detail-section">
+          <h3>Execução orçamentária ${ex.dataBase ? '· posição de ' + fmtDate(ex.dataBase) : ''}</h3>
+          <div class="exec-bars">
+            ${bars.map(b => `
+              <div class="exec-bar-row">
+                <span>${b.label}</span>
+                <div class="track"><i style="width:${valor ? Math.min(100, 100 * (b.val || 0) / valor) : 0}%; background:${b.color};"></i></div>
+                <span class="val">${fmtMoney(b.val)}</span>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        ${(p.alteracoes || []).length ? `
+        <div class="detail-section">
+          <h3>Aditivos e apostilamentos (${p.alteracoes.length})</h3>
+          ${p.alteracoes.map(a => `<div class="pend-item"><b>${esc(a.tipo)} nº ${esc(a.numero)} — ${esc(a.situacao)}</b>${esc((a.texto || '').slice(0, 400))}</div>`).join('')}
+        </div>` : ''}
+
+        ${movs.length ? `
+        <div class="detail-section">
+          <h3>Movimentos (empenhos e liquidações) — últimos ${movs.length}</h3>
+          <div class="mini-table-wrap"><table class="mini-table">
+            <thead><tr><th>Data</th><th>Tipo</th><th class="num">Valor</th></tr></thead>
+            <tbody>${movs.map(m => `<tr><td>${esc(m.data || m.dataLancamento || '—')}</td><td>${esc(m.tipo || m.evento || '—')}</td><td class="num">${fmtMoney(m.valor)}</td></tr>`).join('')}</tbody>
+          </table></div>
+        </div>` : ''}
+
+        ${pags.length ? `
+        <div class="detail-section">
+          <h3>Notas fiscais / pagamentos</h3>
+          <div class="mini-table-wrap"><table class="mini-table">
+            <thead><tr><th>Competência</th><th>NF</th><th>Leitura</th><th class="num">Valor pago</th></tr></thead>
+            <tbody>${pags.map(pg => `<tr><td>${esc(pg.competencia || '—')}</td><td>${esc(pg.nf || '—')}</td><td>${esc(pg.leitura || '—')}</td><td class="num">${fmtMoney(pg.valorPago)}</td></tr>`).join('')}</tbody>
+          </table></div>
+        </div>` : ''}
+
+        ${hist.length ? `
+        <div class="detail-section">
+          <h3>Histórico</h3>
+          ${hist.map(h => `<div class="hist-item"><span class="d">${esc((h.quando || '').slice(0, 16).replace('T', ' '))}</span><span>${esc(h.texto || '')}</span></div>`).join('')}
+        </div>` : ''}
+
+        ${p.obs ? `<div class="detail-section"><h3>Observações</h3><p class="dnote">${esc(p.obs)}</p></div>` : ''}
+      </div>`;
+
+    const container = document.getElementById('contrato-detail');
+    container.innerHTML = html;
+    document.getElementById('detail-close-btn').addEventListener('click', () => {
+      container.innerHTML = '';
+      document.querySelectorAll('#contratos-tbody tr').forEach(tr => tr.classList.remove('selected'));
+    });
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderContratos() {
+    renderContratosKPIs();
+    renderContratosAlertas();
+    renderContratosTabela();
+  }
+
+  async function tryUnlockGestao(password) {
+    const statusEl = document.getElementById('gestao-lock-status');
+    const errorEl = document.getElementById('gestao-lock-error');
+    errorEl.style.display = 'none';
+    statusEl.textContent = 'Carregando e decifrando…';
+    try {
+      const payload = await fetch('contratos_encrypted.json').then(r => r.json());
+      const key = await deriveKey(password, payload.salt, payload.iterations);
+      const iv = b64ToBytes(payload.iv);
+      const cipherBytes = b64ToBytes(payload.ciphertext);
+      const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipherBytes);
+      const json = new TextDecoder().decode(plainBuf);
+      CONTRATOS = JSON.parse(json);
+      document.getElementById('gestao-lock').style.display = 'none';
+      document.getElementById('contratos-content').style.display = 'block';
+      renderContratos();
+    } catch (e) {
+      statusEl.textContent = '';
+      errorEl.style.display = 'block';
+    }
+  }
+  document.getElementById('gestao-unlock-btn').addEventListener('click', () => {
+    tryUnlockGestao(document.getElementById('gestao-pass-input').value);
+  });
+  document.getElementById('gestao-pass-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryUnlockGestao(e.target.value);
+  });
+  document.getElementById('contratos-search').addEventListener('input', (e) => {
+    contratosQuery = e.target.value;
+    renderContratosTabela();
   });
 
   // Perguntas Frequentes — sintetizadas a partir dos padrões mais comuns do histórico real
