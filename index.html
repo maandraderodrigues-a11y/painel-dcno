@@ -1792,11 +1792,11 @@
     renderContratosTabela();
   }
 
-  async function tryUnlockGestao(password) {
+  async function tryUnlockGestao(password, silent) {
     const statusEl = document.getElementById('gestao-lock-status');
     const errorEl = document.getElementById('gestao-lock-error');
     errorEl.style.display = 'none';
-    statusEl.textContent = 'Carregando e decifrando…';
+    if (!silent) statusEl.textContent = 'Carregando e decifrando…';
     try {
       const payload = await fetch('contratos_encrypted.json').then(r => r.json());
       const key = await deriveKey(password, payload.salt, payload.iterations);
@@ -1811,8 +1811,7 @@
       renderContratos();
     } catch (e) {
       statusEl.textContent = '';
-      if (document.activeElement !== document.getElementById('gestao-pass-input')) return; // tentativa automática silenciosa falhou
-      errorEl.style.display = 'block';
+      if (!silent) errorEl.style.display = 'block';
     }
   }
   document.getElementById('gestao-unlock-btn').addEventListener('click', () => {
@@ -2142,11 +2141,11 @@
   document.getElementById('hf-diretoria').addEventListener('change', (e) => { histFiltros.diretoria = e.target.value; renderHistorico(); });
   document.getElementById('hf-busca').addEventListener('input', (e) => { histFiltros.busca = e.target.value; renderHistorico(); });
 
-  async function tryUnlockProjetos(password) {
+  async function tryUnlockProjetos(password, silent) {
     const statusEl = document.getElementById('projetos-lock-status');
     const errorEl = document.getElementById('projetos-lock-error');
     errorEl.style.display = 'none';
-    statusEl.textContent = 'Carregando e decifrando…';
+    if (!silent) statusEl.textContent = 'Carregando e decifrando…';
     try {
       const payload = await fetch('projetos_encrypted.json').then(r => r.json());
       const key = await deriveKey(password, payload.salt, payload.iterations);
@@ -2161,8 +2160,7 @@
       renderProjSub();
     } catch (e) {
       statusEl.textContent = '';
-      if (document.activeElement !== document.getElementById('projetos-pass-input')) return; // tentativa automática silenciosa falhou
-      errorEl.style.display = 'block';
+      if (!silent) errorEl.style.display = 'block';
     }
   }
   document.getElementById('projetos-unlock-btn').addEventListener('click', () => {
@@ -2174,12 +2172,12 @@
 
   // Desbloqueio compartilhado: Contratos e Projetos usam a mesma senha da "Gestão SCCP".
   // Ao abrir uma dessas duas views já com a senha em memória (desbloqueada pela outra),
-  // tenta decifrar direto, sem pedir a senha de novo.
+  // tenta decifrar direto, sem pedir a senha de novo (silenciosamente — sem mostrar erro se, por algum motivo, falhar).
   document.querySelectorAll('.nav-item[data-view="contratos"], .nav-item[data-view="projetos"]').forEach(item => {
     item.addEventListener('click', () => {
       if (!GESTAO_PASSWORD) return;
-      if (item.dataset.view === 'contratos' && !CONTRATOS) tryUnlockGestao(GESTAO_PASSWORD);
-      if (item.dataset.view === 'projetos' && !PROJETOS) tryUnlockProjetos(GESTAO_PASSWORD);
+      if (item.dataset.view === 'contratos' && !CONTRATOS) tryUnlockGestao(GESTAO_PASSWORD, true);
+      if (item.dataset.view === 'projetos' && !PROJETOS) tryUnlockProjetos(GESTAO_PASSWORD, true);
     });
   });
 
