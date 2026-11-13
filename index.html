@@ -243,29 +243,24 @@
     width: 100%;
     height: calc(100vh - var(--gtbar-h));
     overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
-  .stage-fallback {
-    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: min(100vw, 100vh - var(--gtbar-h));
-    aspect-ratio: 1; display: block; pointer-events: none;
+  /* proposta A (Márcio, 13/11): selo nítido no alto; os triângulos só aparecem ao passar o mouse */
+  .selo-wrap {
+    --selo: clamp(150px, min(calc(100vh - var(--gtbar-h) - 270px), 92vw), 460px);
+    position: relative; flex: 0 0 auto; width: var(--selo); height: var(--selo); margin-bottom: 14px;
   }
+  .selo-img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
   .stage-3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .stage--busca .selo-wrap { display: none; }
   .glass {
     position: relative; z-index: 2;
-    width: min(560px, calc(100% - 64px));
-    padding: 28px 28px 26px;
-    border-radius: 24px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    /* vidro bem leve: o selo (e os triângulos virando) continua visível por baixo (Márcio, 13/11) */
-    backdrop-filter: blur(0.8px) saturate(1.1);
-    -webkit-backdrop-filter: blur(0.8px) saturate(1.1);
-    box-shadow: 0 24px 70px rgba(0,0,0,0.14);
+    width: min(640px, calc(100% - 32px));
+    padding: 0;
     text-align: center;
   }
   .glass-title {
-    font-size: clamp(34px, 5.4vw, 62px); font-weight: 900; letter-spacing: -0.01em;
+    font-size: clamp(30px, 6.4vw, 54px); font-weight: 900; letter-spacing: -0.01em; white-space: nowrap;
     line-height: 1.05; text-transform: uppercase; margin: 0 0 18px;
     background: linear-gradient(100deg, var(--glass-ink) 0%, var(--glass-ink) 38%, var(--accent) 46%, #ff5a63 50%, var(--accent) 54%, var(--glass-ink) 62%, var(--glass-ink) 100%);
     background-size: 280% 100%;
@@ -310,7 +305,7 @@
   .stage--busca { padding: 16px 0; }
   .stage--busca .glass {
     width: min(1040px, calc(100% - 32px)); max-height: 100%;
-    display: flex; flex-direction: column; padding: 22px 28px 18px;
+    display: flex; flex-direction: column; padding: 4px 8px 0;
   }
   .stage--busca .glass-title { font-size: clamp(24px, 3.2vw, 38px); margin-bottom: 14px; }
   .stage--busca .glass #home-search-box, .stage--busca #home-search-box { max-width: 720px; flex-shrink: 0; }
@@ -353,7 +348,6 @@
   .gr-lock-row .err { color: var(--accent); font-size: 12px; flex-basis: 100%; }
   @media (prefers-reduced-motion: reduce) { .glass-title { animation: none; background-position: 0% 0; } }
   @media (max-width: 560px) {
-    .glass { padding: 30px 20px 26px; border-radius: 18px; }
     .glass #home-search-box { padding: 12px 16px; }
   }
 
@@ -787,8 +781,10 @@
       <!-- VIEW: INÍCIO — selo da SCCP em triângulos 3D ao fundo + quadro de vidro -->
       <div class="view active" id="view-inicio">
         <section class="stage" id="stage">
-          <img class="stage-fallback" id="stage-fallback" alt="" aria-hidden="true">
-          <canvas class="stage-3d" id="stage-3d" aria-hidden="true"></canvas>
+          <div class="selo-wrap" id="selo-wrap">
+            <img class="selo-img" id="stage-fallback" alt="Selo da SCCP">
+            <canvas class="stage-3d" id="stage-3d" aria-hidden="true"></canvas>
+          </div>
           <div class="glass" id="glass-inicio">
             <h1 class="glass-title">Conecta SCCP</h1>
             <div class="search-box" id="home-search-box" role="search">
@@ -2673,7 +2669,7 @@
    ========================================================================= */
 import * as T from './vendor/three.module.min.js';
 
-const stage = document.getElementById('stage');
+const stage = document.getElementById('selo-wrap');
 const cv = document.getElementById('stage-3d');
 if (stage && cv) {
   try { iniciar(); }
@@ -2727,9 +2723,8 @@ function iniciar() {
   }
   lerFundo();
   const BRANCO = new T.Color(1, 1, 1);
-  const CLARO = 0.78;         // quanto o triângulo clareia ao ser virado pelo mouse
-  const ALFA_REPOUSO = 0.5, ALFA_VIRADO = 0.12;          // opacidade da película de triângulos
-  const selo = document.getElementById('stage-fallback');   // selo nítido (SVG) sob os triângulos
+  const CLARO = 0.45;        // quanto o triângulo clareia ao ser virado pelo mouse
+  const ALFA_PICO = 0.95;     // opacidade do triângulo no instante em que vira (em repouso ele é invisível)
   function sujarCor(m) {
     if (m.instanceColor) m.instanceColor.needsUpdate = true;
     m.geometry.attributes.aAlfa.needsUpdate = true;
@@ -2817,8 +2812,7 @@ function iniciar() {
     sol.position.set(-0.55 * dist, 0.75 * dist, dist);
 
     L = Math.min(W, H) * 1.0;
-    selo.style.width = L + 'px';
-    lado = Math.max(14, Math.min(30, L / 40));
+    lado = Math.max(14, Math.min(26, L / 26));
     alt = lado * Math.sqrt(3) / 2;
     esp = lado * 0.14;
 
@@ -2896,11 +2890,11 @@ function iniciar() {
   }
   function escreverCor(id) {
     const t = tris[id];
-    // em repouso o mosaico é uma película translúcida sobre o selo nítido; o triângulo virado
-    // clareia e fica quase transparente, revelando o selo por baixo (Márcio, 13/11)
-    _c.copy(t.vivo).lerp(BRANCO, t.rev * CLARO);
+    // em repouso o triângulo é invisível (o selo nítido aparece por baixo); ao virar, surge com a
+    // cor do pedaço do selo, um pouco mais clara, e some devagar (proposta A, Márcio, 13/11)
+    _c.copy(t.vivo).lerp(BRANCO, CLARO);
     t.mesh.setColorAt(t.inst, _c);
-    t.mesh.geometry.attributes.aAlfa.setX(t.inst, ALFA_REPOUSO + (ALFA_VIRADO - ALFA_REPOUSO) * t.rev);
+    t.mesh.geometry.attributes.aAlfa.setX(t.inst, ALFA_PICO * t.rev);
   }
   function recolorirTudo() {
     lerFundo();
@@ -2949,8 +2943,7 @@ function iniciar() {
     if (t.eixo.x * ry - t.eixo.y * rx < 0) t.eixo.negate();
     t.th = 0; t.om = 0; t.girando = true; t.ultimo = agora;
     ativos.add(id);
-    // cada passagem alterna a cor: viva fica viva até passar de novo (Márcio, 13/11)
-    t.aceso = !t.aceso; t.alvo = t.aceso ? 1 : 0; ativosCor.add(id);
+    t.alvo = 1; ativosCor.add(id);                           // surge e depois some sozinho (ver passo)
     vizinhos(id).forEach(j => {
       const v = tris[j];
       if (v.girando) return;
@@ -2973,7 +2966,7 @@ function iniciar() {
   const K_GIRO = 55, C_GIRO = 2 * 0.62 * Math.sqrt(55);
   const K_INC = 140, C_INC = 2 * 0.38 * Math.sqrt(140);
   const PASSO = 1 / 120;
-  const TAU_IN = 0.2, TAU_OUT = 0.45;
+  const TAU_IN = 0.1, TAU_OUT = 1.1;
   function passo(h) {
     ativos.forEach(id => {
       const t = tris[id];
@@ -2998,6 +2991,7 @@ function iniciar() {
       const t = tris[id];
       const tau = t.alvo > t.rev ? TAU_IN : TAU_OUT;
       t.rev += (t.alvo - t.rev) * (1 - Math.exp(-h / tau));
+      if (t.alvo === 1 && t.rev > 0.93) t.alvo = 0;
       if (Math.abs(t.alvo - t.rev) < 0.003) { t.rev = t.alvo; ativosCor.delete(id); }
       escreverCor(id);
     });
