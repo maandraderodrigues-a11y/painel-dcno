@@ -2652,7 +2652,7 @@
   });
 
   // Reserva da tela inicial: o selo estático (mesma imagem da barra), caso o 3D não carregue.
-  document.getElementById('stage-fallback').src = document.querySelector('.gt-mark img').src;
+  document.getElementById('stage-fallback').src = 'assets/selo-carimbo.png';
 </script>
 
 <script type="module">
@@ -2748,7 +2748,7 @@ function iniciar() {
     setTimeout(refazer, 400);
     window.addEventListener('load', refazer, { once: true });
   };
-  img.src = document.querySelector('.gt-mark img').src;
+  img.src = 'assets/selo-carimbo.png';
 
   // ---------------- geometria: prisma triangular com chanfro ----------------
   function montarGeometria(s, t, cima) {
