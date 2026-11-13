@@ -2582,15 +2582,19 @@ function iniciar() {
   new MutationObserver(recolorir).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', recolorir);
 
+  // Redimensionar: reconstrói a grade. Se o palco nasceu sem tamanho (aba em segundo plano,
+  // painel oculto), refaz na hora em que ganha tamanho; senão espera o usuário parar de arrastar.
   let espera;
   new ResizeObserver(() => {
     clearTimeout(espera);
-    espera = setTimeout(() => {
+    const refaz = () => {
       if (!pix) return;
       const r = stage.getBoundingClientRect();
+      if (r.width < 50 || r.height < 50) return;
       if (Math.round(r.width) === W && Math.round(r.height) === H) return;
       construir(); desenhar();
-    }, 150);
+    };
+    if (W < 50 || H < 50) refaz(); else espera = setTimeout(refaz, 150);
   }).observe(stage);
 
   if (reduzir) return;
