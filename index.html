@@ -2257,10 +2257,20 @@ function iniciar() {
   const sonda = document.createElement('span');
   sonda.style.display = 'none';
   stage.appendChild(sonda);
-  const fundo = new T.Color();
+  const fundo = new T.Color(), vermelho = new T.Color('#e30613');
   function lerFundo() {
     sonda.style.color = 'var(--bg, #faf8f6)';
     fundo.set(getComputedStyle(sonda).color || '#faf8f6');
+    sonda.style.color = 'var(--accent, #e30613)';
+    vermelho.set(getComputedStyle(sonda).color || '#e30613');
+  }
+  // versão "viva" de uma cor do selo: mais saturada e com mais contraste (Márcio, 13/11)
+  const _hsl = { h: 0, s: 0, l: 0 };
+  function avivar(cor) {
+    cor.getHSL(_hsl);
+    const s = Math.min(1, _hsl.s * 1.5 + 0.05);
+    const l = _hsl.l > 0.5 ? Math.min(1, 0.5 + (_hsl.l - 0.5) * 1.3) : Math.max(0, 0.5 - (0.5 - _hsl.l) * 1.3);
+    return new T.Color().setHSL(_hsl.h, s, l);
   }
   lerFundo();
   const REPOUSO = 0.26;        // quanto da cor do selo aparece em repouso (o resto é fundo)
@@ -2323,7 +2333,7 @@ function iniciar() {
   const ativos = new Set(), ativosCor = new Set();
   const EZ = new T.Vector3(0, 0, 1);
   const _q = new T.Quaternion(), _p = new T.Vector3(), _um = new T.Vector3(1, 1, 1);
-  const _m = new T.Matrix4(), _mt = new T.Matrix4(), _v = new T.Vector3(), _c = new T.Color();
+  const _m = new T.Matrix4(), _mt = new T.Matrix4(), _v = new T.Vector3(), _c = new T.Color(), _c2 = new T.Color();
 
   function amostrar(x, y) {
     // (x,y) no mundo → pixel da textura (selo centrado, lado L)
@@ -2378,13 +2388,21 @@ function iniciar() {
           repouso: new T.Quaternion(), eixo: new T.Vector3(), th: 0, om: 0, girando: false, ultimo: 0,
           eixoT: new T.Vector3(), piv: new T.Vector3(), ph: 0, pv: 0 };
         tris[id] = t;
-        if (Math.hypot(cx, cy) > raio) continue;           // fora do selo
-        // cor média de 4 pontos (centróide + rumo a cada vértice)
-        let rr = 0, gg = 0, bb = 0, aa = 0;
-        const pts = [[cx, cy], ...vs.map(v => [cx + (v[0] - cx) * 0.55, cy + (v[1] - cy) * 0.55])];
-        pts.forEach(p => { const s = amostrar(p[0], p[1]); const a = s[3] / 255; rr += s[0] * a; gg += s[1] * a; bb += s[2] * a; aa += a; });
-        if (aa < 0.5) continue;                              // transparente (borda do círculo)
-        t.base = new T.Color(rr / aa / 255, gg / aa / 255, bb / aa / 255);
+        const dist = Math.hypot(cx, cy);
+        if (dist > raio) continue;                           // fora do selo
+        if (dist > raio - lado * 1.05) {
+          // anel externo: borda vermelha do selo, sempre bem visível
+          t.borda = true;
+          t.base = vermelho.clone();
+        } else {
+          // cor média de 4 pontos (centróide + rumo a cada vértice)
+          let rr = 0, gg = 0, bb = 0, aa = 0;
+          const pts = [[cx, cy], ...vs.map(v => [cx + (v[0] - cx) * 0.55, cy + (v[1] - cy) * 0.55])];
+          pts.forEach(p => { const s = amostrar(p[0], p[1]); const a = s[3] / 255; rr += s[0] * a; gg += s[1] * a; bb += s[2] * a; aa += a; });
+          if (aa < 0.5) continue;                            // transparente (borda do círculo)
+          t.base = new T.Color(rr / aa / 255, gg / aa / 255, bb / aa / 255);
+        }
+        t.vivo = avivar(t.base);
         porLado[cima ? 0 : 1].push(id);
       }
     }
@@ -2418,8 +2436,10 @@ function iniciar() {
   }
   function escreverCor(id) {
     const t = tris[id];
-    const f = REPOUSO + t.rev * (1 - REPOUSO);
-    _c.copy(fundo).lerp(t.base, f);
+    let f = REPOUSO + t.rev * (1 - REPOUSO);
+    if (t.borda) f = Math.max(f, 0.75);
+    _c2.copy(t.base).lerp(t.vivo, t.rev);
+    _c.copy(fundo).lerp(_c2, f);
     t.mesh.setColorAt(t.inst, _c);
   }
   function recolorirTudo() {
