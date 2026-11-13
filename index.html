@@ -426,6 +426,18 @@
   .quick-title { font-size: 13px; font-weight: 700; margin: 0 0 3px; }
   .quick-count { font-size: 11.5px; color: var(--ink-muted); }
 
+  /* Cor por área (paleta C) */
+  .quick-card { --area: #e30613; --area-ink: #fff; border-top: 3px solid var(--area); }
+  .quick-card .quick-ic { background: var(--area); color: var(--area-ink); }
+  .quick-card[data-view="jurisprudencia"] { --area: #0e6b7c; }
+  .quick-card[data-title="Manuais e Cartilhas"] { --area: #f2a900; --area-ink: #3a2500; }
+  .quick-card[data-title="Modelos e Minutas"] { --area: #5c7a1f; }
+  .quick-card[data-title="Pareceres Técnicos"] { --area: #7a3b69; }
+  .quick-card[data-view="chamados"] { --area: #2d5fa3; }
+  .quick-card[data-title="Capacitações"] { --area: #d9660b; }
+  .quick-card[data-view="faq"] { --area: #a8000f; }
+  .global-topbar { box-shadow: 0 3px 0 #ffb612; }
+
   /* FAQ */
   .faq-list { display: flex; flex-direction: column; gap: 8px; }
   .faq-item {
