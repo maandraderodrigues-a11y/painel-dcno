@@ -247,15 +247,15 @@
   }
   .stage-fallback {
     position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: min(92vw, 92 * (100vh - var(--gtbar-h)) / 100);
-    aspect-ratio: 1; opacity: 0.28; display: block; pointer-events: none;
+    width: min(100vw, 100vh - var(--gtbar-h));
+    aspect-ratio: 1; opacity: 0.9; display: block; pointer-events: none;
   }
   .stage--3d .stage-fallback { display: none; }
   .stage-3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .glass {
     position: relative; z-index: 2;
-    width: min(760px, calc(100% - 32px));
-    padding: 44px 40px 40px;
+    width: min(620px, calc(100% - 64px));
+    padding: 40px 32px 36px;
     border-radius: 24px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
@@ -564,6 +564,20 @@
     padding: 16px;
     box-shadow: var(--shadow-sm);
   }
+  .chamado-card--click { cursor: pointer; transition: border-color .15s ease, box-shadow .15s ease; }
+  .chamado-card--click:hover, .chamado-card--click:focus-visible { border-color: var(--accent); box-shadow: 0 4px 16px rgba(0,0,0,0.10); outline: none; }
+  .ch-modal { position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .ch-modal[hidden] { display: none; }
+  .ch-dialog { background: var(--surface); color: var(--ink-primary); border: 1px solid var(--border); border-radius: 16px; width: min(820px, 100%); max-height: 100%; display: flex; flex-direction: column; box-shadow: 0 30px 80px rgba(0,0,0,0.35); }
+  .ch-bar { display: flex; align-items: center; gap: 10px; padding: 12px 14px 12px 20px; border-bottom: 1px solid var(--border); }
+  .ch-meta { display: flex; align-items: center; gap: 10px; flex: 1; flex-wrap: wrap; }
+  .ch-x { width: 34px; height: 34px; border-radius: 50%; border: 0; background: transparent; color: var(--ink-muted); font-size: 24px; line-height: 1; cursor: pointer; }
+  .ch-x:hover { background: var(--surface-sunken); color: var(--ink-primary); }
+  .ch-body { padding: 18px 22px 24px; overflow-y: auto; }
+  .ch-assunto { font-size: 19px; font-weight: 800; margin: 0 0 8px; line-height: 1.3; }
+  .ch-org { font-size: 12.5px; color: var(--ink-secondary); margin-bottom: 14px; }
+  .ch-texto { font-size: 14px; line-height: 1.6; color: var(--ink-secondary); white-space: pre-wrap; overflow-wrap: anywhere; margin-bottom: 16px; }
+  .ch-texto.answer { color: var(--ink-primary); }
   .chamado-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
   .chamado-id { font-size: 11px; color: var(--ink-muted); margin-left: auto; }
   .chamado-org {
@@ -1464,6 +1478,49 @@
   function esc(s) {
     return String(s || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
   }
+  // Texto completo do chamado em uma janela (Márcio, 13/11)
+  let chamadoModal = null, chamadoFoco = null;
+  function fecharChamado() {
+    if (!chamadoModal || chamadoModal.hidden) return;
+    chamadoModal.hidden = true;
+    document.body.style.overflow = '';
+    if (chamadoFoco && chamadoFoco.focus) chamadoFoco.focus();
+  }
+  function abrirChamado(c) {
+    if (!chamadoModal) {
+      chamadoModal = document.createElement('div');
+      chamadoModal.className = 'ch-modal';
+      chamadoModal.hidden = true;
+      chamadoModal.innerHTML =
+        '<div class="ch-dialog" role="dialog" aria-modal="true" aria-labelledby="ch-m-assunto">' +
+          '<div class="ch-bar"><div class="ch-meta" id="ch-m-meta"></div>' +
+          '<button type="button" class="ch-x" id="ch-m-x" aria-label="Fechar">&times;</button></div>' +
+          '<div class="ch-body">' +
+            '<h2 class="ch-assunto" id="ch-m-assunto"></h2>' +
+            '<div class="ch-org" id="ch-m-org"></div>' +
+            '<div class="chamado-qa-label">Pergunta</div><div class="ch-texto" id="ch-m-q"></div>' +
+            '<div class="chamado-qa-label">Resposta</div><div class="ch-texto answer" id="ch-m-a"></div>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(chamadoModal);
+      chamadoModal.addEventListener('click', (e) => { if (e.target === chamadoModal) fecharChamado(); });
+      chamadoModal.querySelector('#ch-m-x').addEventListener('click', fecharChamado);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fecharChamado(); });
+    }
+    chamadoFoco = document.activeElement;
+    const $ = (id) => chamadoModal.querySelector('#' + id);
+    $('ch-m-meta').innerHTML = '<span class="law-tag cat-decreto">' + esc(c.type) + '</span><span class="chamado-id">#' + esc(c.id) + ' · ' + esc(c.date) + '</span>';
+    $('ch-m-assunto').textContent = c.subject || '(sem assunto)';
+    const org = [c.institution, c.municipio].filter(Boolean).join(' · ');
+    $('ch-m-org').textContent = org ? '🏛 ' + org : '';
+    $('ch-m-org').style.display = org ? '' : 'none';
+    $('ch-m-q').textContent = c.question || '—';
+    $('ch-m-a').textContent = c.answer || '—';
+    chamadoModal.hidden = false;
+    chamadoModal.querySelector('.ch-body').scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+    $('ch-m-x').focus();
+  }
   function renderChamados(query) {
     const list = document.getElementById('chamado-list');
     const countEl = document.getElementById('chamado-count');
@@ -1476,7 +1533,12 @@
     list.innerHTML = '';
     filtered.forEach(c => {
       const card = document.createElement('div');
-      card.className = 'chamado-card';
+      card.className = 'chamado-card chamado-card--click';
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', 'Abrir texto completo do chamado ' + c.id);
+      card.addEventListener('click', () => abrirChamado(c));
+      card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirChamado(c); } });
       const orgBadge = (c.institution || c.municipio)
         ? '<span class="chamado-org">🏛 ' + esc(c.institution || '') + (c.institution && c.municipio ? ' · ' : '') + esc(c.municipio || '') + '</span>'
         : '';
@@ -2426,7 +2488,7 @@
         t: c.subject || '(sem assunto)',
         m: [c.type, c.institution, c.municipio, '#' + c.id].filter(Boolean).join(' · '),
         x: (c.question || '') + ' ' + (c.answer || ''),
-        abrir: () => { goToView('chamados'); document.getElementById('chamado-search').value = buscaAtual; renderChamados(buscaAtual); },
+        abrir: () => abrirChamado(c),
       }))),
       todos: (q) => { goToView('chamados'); document.getElementById('chamado-search').value = q; renderChamados(q); } },
   ];
@@ -2657,7 +2719,9 @@ function iniciar() {
     return new T.Color().setHSL(_hsl.h, s, l);
   }
   lerFundo();
-  const REPOUSO = 0.26;        // quanto da cor do selo aparece em repouso (o resto é fundo)
+  const BRANCO = new T.Color(1, 1, 1);
+  const CLARO = 0.78;         // quanto o triângulo clareia ao ser virado pelo mouse
+  const CLARO_BORDA = 0.62;   // o anel vermelho clareia um pouco menos
 
   // ---------------- textura: o selo rasterizado para amostrar cores ----------------
   const TEX = 1024;
@@ -2740,7 +2804,7 @@ function iniciar() {
     camera.updateProjectionMatrix();
     sol.position.set(-0.55 * dist, 0.75 * dist, dist);
 
-    L = Math.min(W, H) * 0.92;
+    L = Math.min(W, H) * 1.0;
     lado = Math.max(18, Math.min(42, L / 30));
     alt = lado * Math.sqrt(3) / 2;
     esp = lado * 0.14;
@@ -2820,10 +2884,8 @@ function iniciar() {
   }
   function escreverCor(id) {
     const t = tris[id];
-    let f = REPOUSO + t.rev * (1 - REPOUSO);
-    if (t.borda) f = Math.max(f, 0.75);
-    _c2.copy(t.base).lerp(t.vivo, t.rev);
-    _c.copy(fundo).lerp(_c2, f);
+    // em repouso o selo aparece vivo; o triângulo virado clareia (Márcio, 13/11)
+    _c.copy(t.vivo).lerp(BRANCO, t.rev * (t.borda ? CLARO_BORDA : CLARO));
     t.mesh.setColorAt(t.inst, _c);
   }
   function recolorirTudo() {
