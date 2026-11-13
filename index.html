@@ -2728,9 +2728,7 @@ function iniciar() {
   lerFundo();
   const BRANCO = new T.Color(1, 1, 1);
   const CLARO = 0.78;         // quanto o triângulo clareia ao ser virado pelo mouse
-  const CLARO_BORDA = 0.62;   // o anel vermelho clareia um pouco menos
   const ALFA_REPOUSO = 0.5, ALFA_VIRADO = 0.12;          // opacidade da película de triângulos
-  const ALFA_BORDA = 0.92, ALFA_BORDA_VIRADO = 0.4;
   const selo = document.getElementById('stage-fallback');   // selo nítido (SVG) sob os triângulos
   function sujarCor(m) {
     if (m.instanceColor) m.instanceColor.needsUpdate = true;
@@ -2853,11 +2851,7 @@ function iniciar() {
         tris[id] = t;
         const dist = Math.hypot(cx, cy);
         if (dist > raio) continue;                           // fora do selo
-        if (dist > raio - lado * 1.05) {
-          // anel externo: borda vermelha do selo, sempre bem visível
-          t.borda = true;
-          t.base = vermelho.clone();
-        } else {
+        {
           // cor média de 4 pontos (centróide + rumo a cada vértice)
           let rr = 0, gg = 0, bb = 0, aa = 0;
           const pts = [[cx, cy], ...vs.map(v => [cx + (v[0] - cx) * 0.55, cy + (v[1] - cy) * 0.55])];
@@ -2904,10 +2898,9 @@ function iniciar() {
     const t = tris[id];
     // em repouso o mosaico é uma película translúcida sobre o selo nítido; o triângulo virado
     // clareia e fica quase transparente, revelando o selo por baixo (Márcio, 13/11)
-    _c.copy(t.vivo).lerp(BRANCO, t.rev * (t.borda ? CLARO_BORDA : CLARO));
+    _c.copy(t.vivo).lerp(BRANCO, t.rev * CLARO);
     t.mesh.setColorAt(t.inst, _c);
-    const a0 = t.borda ? ALFA_BORDA : ALFA_REPOUSO, a1 = t.borda ? ALFA_BORDA_VIRADO : ALFA_VIRADO;
-    t.mesh.geometry.attributes.aAlfa.setX(t.inst, a0 + (a1 - a0) * t.rev);
+    t.mesh.geometry.attributes.aAlfa.setX(t.inst, ALFA_REPOUSO + (ALFA_VIRADO - ALFA_REPOUSO) * t.rev);
   }
   function recolorirTudo() {
     lerFundo();
