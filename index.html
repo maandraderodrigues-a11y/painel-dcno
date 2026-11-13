@@ -2237,7 +2237,9 @@ if (stage && cv) {
 
 function iniciar() {
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const renderer = new T.WebGLRenderer({ canvas: cv, alpha: true, antialias: true, powerPreference: 'low-power' });
+  // preserveDrawingBuffer: o quadro fica no canvas mesmo sem o laço rodando (capturas de tela,
+  // impressão e o painel do navegador do Claude só viam o selo enquanto havia animação)
+  const renderer = new T.WebGLRenderer({ canvas: cv, alpha: true, antialias: true, powerPreference: 'low-power', preserveDrawingBuffer: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setClearColor(0x000000, 0);
 
