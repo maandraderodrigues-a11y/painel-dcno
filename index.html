@@ -2275,6 +2275,11 @@ function iniciar() {
     pix = g.getImageData(0, 0, TEX, TEX).data;
     construir(); desenhar();
     stage.classList.add('stage--3d');
+    // o primeiro quadro às vezes sai antes de o palco ter o tamanho final: refaz logo depois
+    const refazer = () => { const r = stage.getBoundingClientRect(); if (Math.round(r.width) !== W || Math.round(r.height) !== H) construir(); desenhar(); };
+    requestAnimationFrame(refazer);
+    setTimeout(refazer, 400);
+    window.addEventListener('load', refazer, { once: true });
   };
   img.src = document.querySelector('.gt-mark img').src;
 
