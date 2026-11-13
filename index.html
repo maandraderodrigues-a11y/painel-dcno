@@ -2469,6 +2469,8 @@ function iniciar() {
     if (t.eixo.x * ry - t.eixo.y * rx < 0) t.eixo.negate();
     t.th = 0; t.om = 0; t.girando = true; t.ultimo = agora;
     ativos.add(id);
+    // cada passagem alterna a cor: viva fica viva até passar de novo (Márcio, 13/11)
+    t.aceso = !t.aceso; t.alvo = t.aceso ? 1 : 0; ativosCor.add(id);
     vizinhos(id).forEach(j => {
       const v = tris[j];
       if (v.girando) return;
@@ -2486,27 +2488,12 @@ function iniciar() {
     });
     acordar();
   }
-  // alvo de revelação: 1 perto do ponteiro, caindo até 0 a ~3 triângulos de distância
-  function revelar(px, py) {
-    const R = lado * 3.2;
-    tris.forEach((t, id) => {
-      if (t.inst < 0) return;
-      const d = Math.hypot(t.cx - px, t.cy - py);
-      t.alvo = d >= R ? 0 : 1 - (d / R) * (d / R);
-      if (t.alvo > 0 || t.rev > 0) ativosCor.add(id);
-    });
-    acordar();
-  }
-  function esmaecer() {
-    tris.forEach((t, id) => { if (t.inst >= 0 && (t.alvo > 0 || t.rev > 0)) { t.alvo = 0; ativosCor.add(id); } });
-    acordar();
-  }
 
   // ---------------- física (passo fixo) ----------------
   const K_GIRO = 55, C_GIRO = 2 * 0.62 * Math.sqrt(55);
   const K_INC = 140, C_INC = 2 * 0.38 * Math.sqrt(140);
   const PASSO = 1 / 120;
-  const TAU_IN = 0.12, TAU_OUT = 1.8;
+  const TAU_IN = 0.2, TAU_OUT = 0.45;
   function passo(h) {
     ativos.forEach(id => {
       const t = tris[id];
@@ -2570,7 +2557,6 @@ function iniciar() {
     ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ndc, camera);
     if (!ray.ray.intersectPlane(plano, ponto)) return;
-    revelar(ponto.x, ponto.y);
     const id = trianguloEm(ponto.x, ponto.y);
     if (id < 0 || tris[id].inst < 0 || id === ultimoId) return;
     ultimoId = id;
@@ -2600,7 +2586,7 @@ function iniciar() {
   if (reduzir) return;
   stage.addEventListener('pointermove', aoPonteiro, { passive: true });
   stage.addEventListener('pointerdown', aoPonteiro, { passive: true });
-  stage.addEventListener('pointerleave', () => { ultimoId = -1; esmaecer(); }, { passive: true });
+  stage.addEventListener('pointerleave', () => { ultimoId = -1; }, { passive: true });
 
   new IntersectionObserver(ents => {
     visivel = ents[0].isIntersecting;
