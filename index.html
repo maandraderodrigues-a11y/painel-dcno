@@ -283,14 +283,75 @@
   }
   .glass #home-search-box {
     max-width: 560px; margin: 0 auto;
-    padding: 15px 22px;
+    padding: 7px 7px 7px 24px;
     background: var(--surface);
     border: 2px solid rgba(227,6,19,0.35);
     box-shadow: 0 12px 34px rgba(0,0,0,0.18);
-    transition: border-color .15s ease, box-shadow .15s ease;
+    transition: border-color .15s ease, box-shadow .15s ease, max-width .35s ease;
   }
   .glass #home-search-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(227,6,19,0.14), 0 12px 34px rgba(0,0,0,0.18); }
   .glass #home-search-box input { font-size: 16px; }
+  .search-go {
+    flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer;
+    background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center;
+    transition: transform .12s ease, filter .12s ease;
+  }
+  .search-go:hover { filter: brightness(1.08); transform: scale(1.05); }
+  .search-go:focus-visible, .search-clear:focus-visible { outline: 3px solid rgba(227,6,19,0.35); outline-offset: 2px; }
+  .search-clear {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; border: 0; cursor: pointer;
+    background: transparent; color: var(--ink-muted); display: flex; align-items: center; justify-content: center;
+  }
+  .search-clear[hidden] { display: none; }
+  .search-clear:hover { background: var(--surface-sunken); color: var(--ink-primary); }
+
+  /* Resultados dentro do próprio quadro: ao buscar, o quadro cresce e lista os principais resultados */
+  .stage { box-sizing: border-box; }
+  .glass { transition: width .35s ease, padding .35s ease; }
+  .stage--busca { padding: 16px 0; }
+  .stage--busca .glass {
+    width: min(1040px, calc(100% - 32px)); max-height: 100%;
+    display: flex; flex-direction: column; padding: 22px 28px 18px;
+  }
+  .stage--busca .glass-title { font-size: clamp(24px, 3.2vw, 38px); margin-bottom: 14px; }
+  .stage--busca .glass #home-search-box, .stage--busca #home-search-box { max-width: 720px; flex-shrink: 0; }
+  .glass-results {
+    display: none; margin-top: 16px; min-height: 0; flex: 1 1 auto; overflow-y: auto;
+    text-align: left; border-radius: 16px; padding: 4px 18px 14px;
+    background: var(--surface);
+    background: color-mix(in srgb, var(--surface) 91%, transparent);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+  }
+  .stage--busca .glass-results { display: block; animation: grEntra .3s ease; }
+  @keyframes grEntra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .gr-resumo { font-size: 12.5px; color: var(--ink-muted); padding: 12px 2px 6px; }
+  .gr-resumo strong { color: var(--ink-primary); }
+  .gr-grupo { padding: 8px 0 6px; border-top: 1px solid var(--border); }
+  .gr-grupo:first-of-type { border-top: 0; }
+  .gr-grupo-head { display: flex; align-items: center; gap: 8px; margin: 4px 0 4px; }
+  .gr-grupo-head h3 { margin: 0; font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-soft-ink); }
+  .gr-n { background: var(--accent-soft-bg); color: var(--accent-soft-ink); border-radius: 100px; padding: 1px 8px; font-size: 11px; font-weight: 700; }
+  .gr-todos { margin-left: auto; background: none; border: 0; padding: 4px 6px; color: var(--accent); font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; border-radius: 6px; }
+  .gr-todos:hover { background: var(--accent-soft-bg); }
+  .gr-item {
+    display: block; width: 100%; text-align: left; padding: 8px 10px; border: 0; border-radius: 10px;
+    background: transparent; color: inherit; font: inherit; cursor: pointer; text-decoration: none;
+  }
+  .gr-item:hover, .gr-item:focus-visible { background: var(--surface-sunken); outline: none; }
+  .gr-t, .gr-s { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; -webkit-line-clamp: 2; }
+  .gr-t { font-size: 14px; font-weight: 650; color: var(--ink-primary); line-height: 1.35; }
+  .gr-m { display: block; font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
+  .gr-s { font-size: 12.5px; color: var(--ink-secondary); margin-top: 3px; line-height: 1.45; }
+  .gr-item mark { background: rgba(227,6,19,0.15); color: inherit; border-radius: 3px; padding: 0 1px; }
+  .gr-vazio { padding: 18px 4px 8px; font-size: 14px; color: var(--ink-secondary); }
+  .gr-lock { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 10px; }
+  .gr-lock-title { font-size: 12px; color: var(--ink-muted); margin: 0 0 8px; }
+  .gr-lock-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 4px 0; font-size: 13px; color: var(--ink-secondary); }
+  .gr-lock-row span.rot { flex: 1 1 220px; }
+  .gr-lock-row input { flex: 0 1 170px; min-width: 120px; padding: 7px 10px; border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface); color: var(--ink-primary); font: inherit; font-size: 13px; }
+  .gr-lock-row button { padding: 7px 12px; border: 0; border-radius: 8px; background: var(--accent); color: #fff; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+  .gr-lock-row .err { color: var(--accent); font-size: 12px; flex-basis: 100%; }
   @media (prefers-reduced-motion: reduce) { .glass-title { animation: none; background-position: 0% 0; } }
   @media (max-width: 560px) {
     .glass { padding: 30px 20px 26px; border-radius: 18px; }
@@ -717,10 +778,19 @@
           <canvas class="stage-3d" id="stage-3d" aria-hidden="true"></canvas>
           <div class="glass" id="glass-inicio">
             <h1 class="glass-title">Conecta SCCP</h1>
-            <div class="search-box" id="home-search-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-              <input type="text" placeholder="Buscar lei, acórdão, modelo ou manual…" id="search-input">
-              <span class="search-kbd">/</span>
+            <div class="search-box" id="home-search-box" role="search">
+              <input type="text" placeholder="Buscar lei, acórdão, modelo ou manual…" id="search-input" autocomplete="off" enterkeyhint="search" aria-label="Buscar no site">
+              <button type="button" class="search-clear" id="search-clear" hidden aria-label="Limpar busca" title="Limpar busca">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </button>
+              <button type="button" class="search-go" id="search-go" aria-label="Buscar" title="Buscar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              </button>
+            </div>
+            <div class="glass-results" id="glass-results" aria-live="polite">
+              <div class="gr-resumo" id="gr-resumo"></div>
+              <div id="gr-corpo"></div>
+              <div class="gr-lock" id="gr-lock"></div>
             </div>
           </div>
         </section>
@@ -1271,6 +1341,27 @@
     try { localStorage.setItem('dcno-theme', next); } catch (e) {}
   });
 
+  // Busca sem acento e sem diferença de maiúscula/minúscula (Márcio, 13/11):
+  // "resolucao" encontra "Resolução"; "49185" encontra "49.185".
+  function norm(s) {
+    return String(s == null ? '' : s).normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/º/g, 'o').replace(/ª/g, 'a').toLowerCase();
+  }
+  function palavrasDe(q) { return norm(q).split(/\s+/).filter(Boolean); }
+  // item: objeto com campo de texto já normalizado em `campo`; guarda a versão sem pontos de milhar em `campo+'_d'`
+  function contemPalavra(item, campo, w) {
+    const h = item[campo];
+    if (h.includes(w)) return true;
+    if (!/^\d{3,}$/.test(w)) return false;
+    const k = campo + '_d';
+    if (item[k] === undefined) item[k] = h.replace(/(\d)\./g, '$1');
+    return item[k].includes(w);
+  }
+  function textoBusca(item, campo, build) {
+    if (item[campo] === undefined) item[campo] = norm(build(item));
+    return item;
+  }
+
   // View switching
   const views = document.querySelectorAll('.view');
   function showView(name, item) {
@@ -1304,9 +1395,10 @@
   function goToView(name, item) {
     syncGtNav(gtAreaFor(name));
     showView(name, item);
-    if (name === 'contratos' && !CONTRATOS && GESTAO_PASSWORD) tryUnlockGestao(GESTAO_PASSWORD, true);
-    if (name === 'projetos' && !PROJETOS && GESTAO_PASSWORD) tryUnlockProjetos(GESTAO_PASSWORD, true);
-    if (name === 'equipe' && !PROJETOS && GESTAO_PASSWORD) tryUnlockEquipe(GESTAO_PASSWORD, true);
+    const travado = (id) => document.getElementById(id).style.display !== 'none';
+    if (name === 'contratos' && GESTAO_PASSWORD && travado('gestao-lock')) tryUnlockGestao(GESTAO_PASSWORD, true);
+    if (name === 'projetos' && GESTAO_PASSWORD && travado('projetos-lock')) tryUnlockProjetos(GESTAO_PASSWORD, true);
+    if (name === 'equipe' && GESTAO_PASSWORD && travado('equipe-lock')) tryUnlockEquipe(GESTAO_PASSWORD, true);
   }
 
   document.querySelectorAll('.gt-link[data-gview]').forEach(btn => {
@@ -1326,12 +1418,12 @@
   function renderLaws() {
     const list = document.getElementById('law-list');
     const countEl = document.getElementById('law-count');
-    const q = currentQuery.trim().toLowerCase();
+    const qs = palavrasDe(currentQuery);
     const filtered = LAWS.filter(l => {
       if (currentCat !== 'all' && l.cat !== currentCat) return false;
-      if (!q) return true;
-      const haystack = (l.title + ' ' + l.desc + ' ' + l.tag + ' ' + (l.aliases || []).join(' ')).toLowerCase();
-      return q.split(/\s+/).filter(Boolean).every(word => haystack.includes(word));
+      if (!qs.length) return true;
+      textoBusca(l, '_h', x => x.title + ' ' + x.desc + ' ' + x.tag + ' ' + (x.aliases || []).join(' '));
+      return qs.every(w => contemPalavra(l, '_h', w));
     });
     list.innerHTML = '';
     filtered.forEach(l => {
@@ -1375,11 +1467,11 @@
   function renderChamados(query) {
     const list = document.getElementById('chamado-list');
     const countEl = document.getElementById('chamado-count');
-    const q = (query || '').trim().toLowerCase();
+    const qs = palavrasDe(query);
     const filtered = CHAMADOS.filter(c => {
-      if (!q) return true;
-      const haystack = (c.subject + ' ' + c.type + ' ' + (c.institution||'') + ' ' + (c.municipio||'') + ' ' + c.question + ' ' + c.answer).toLowerCase();
-      return q.split(/\s+/).filter(Boolean).every(w => haystack.includes(w));
+      if (!qs.length) return true;
+      textoBusca(c, '_h', x => x.subject + ' ' + x.type + ' ' + (x.institution||'') + ' ' + (x.municipio||'') + ' ' + x.question + ' ' + x.answer);
+      return qs.every(w => contemPalavra(c, '_h', w));
     });
     list.innerHTML = '';
     filtered.forEach(c => {
@@ -1420,11 +1512,11 @@
   }
   function b64ToBytes(b64) { return Uint8Array.from(atob(b64), c => c.charCodeAt(0)); }
 
-  async function tryUnlockChamados(password) {
+  async function tryUnlockChamados(password, silent) {
     const statusEl = document.getElementById('chamado-lock-status');
     const errorEl = document.getElementById('chamado-lock-error');
     errorEl.style.display = 'none';
-    statusEl.textContent = 'Carregando e decifrando…';
+    if (!silent) statusEl.textContent = 'Carregando e decifrando…';
     try {
       const payload = await fetch('chamados_encrypted.json').then(r => r.json());
       const key = await deriveKey(password, payload.salt, payload.iterations);
@@ -1438,7 +1530,7 @@
       renderChamados('');
     } catch (e) {
       statusEl.textContent = '';
-      errorEl.style.display = 'block';
+      if (!silent) errorEl.style.display = 'block';
     }
   }
   document.getElementById('chamado-unlock-btn').addEventListener('click', () => {
@@ -1549,11 +1641,11 @@
   }
 
   function renderContratosTabela() {
-    const q = contratosQuery.trim().toLowerCase();
+    const qs = palavrasDe(contratosQuery);
     const procs = CONTRATOS.processos.filter(p => {
-      if (!q) return true;
-      const hay = [p.contrato, p.contratada, p.gestor, p.fiscal, p.sei, p.instrumento].filter(Boolean).join(' ').toLowerCase();
-      return hay.includes(q);
+      if (!qs.length) return true;
+      textoBusca(p, '_h', x => [x.contrato, x.contratada, x.gestor, x.fiscal, x.sei, x.instrumento].filter(Boolean).join(' '));
+      return qs.every(w => contemPalavra(p, '_h', w));
     });
     const tbody = document.getElementById('contratos-tbody');
     tbody.innerHTML = procs.map(p => {
@@ -1851,16 +1943,16 @@
   }
 
   function renderProjetosTabela() {
-    const q = projQuery.trim().toLowerCase();
+    const qs = palavrasDe(projQuery);
     const tarefas = getPlano().tarefas.filter(t => {
       if (projFiltros.diretoria && !(t.diretorias || []).includes(projFiltros.diretoria)) return false;
       if (projFiltros.prioridade && t.prioridade !== projFiltros.prioridade) return false;
       if (projFiltros.situacao === 'atrasado' && !(t.aberta && t.atraso > 0)) return false;
       if (projFiltros.situacao === 'aberto' && !(t.aberta && !(t.atraso > 0))) return false;
       if (projFiltros.situacao === 'concluido' && t.aberta) return false;
-      if (q) {
-        const hay = [t.nome, ...(t.frentes || []), ...(t.resp || [])].join(' ').toLowerCase();
-        if (!hay.includes(q)) return false;
+      if (qs.length) {
+        textoBusca(t, '_h', x => [x.nome, ...(x.frentes || []), ...(x.resp || [])].join(' '));
+        if (!qs.every(w => contemPalavra(t, '_h', w))) return false;
       }
       return true;
     });
@@ -1945,12 +2037,15 @@
     const agora = new Date();
     const limites = { '7d': 7, '30d': 30, '12m': 365, 'tudo': Infinity };
     const limiteDias = limites[histFiltros.periodo] ?? 30;
-    const q = histFiltros.busca.trim().toLowerCase();
+    const qs = palavrasDe(histFiltros.busca);
     let eventos = (plano.eventos || []).filter(e => {
       const refData = e.registrado || e.data;
       if (limiteDias !== Infinity && diasDesde(refData) > limiteDias) return false;
       if (histFiltros.diretoria && !(e.diretorias || []).includes(histFiltros.diretoria)) return false;
-      if (q && !(e.nome || '').toLowerCase().includes(q)) return false;
+      if (qs.length) {
+        textoBusca(e, '_h', x => x.nome || '');
+        if (!qs.every(w => contemPalavra(e, '_h', w))) return false;
+      }
       return true;
     });
     eventos.sort((a, b) => (b.registrado || b.data || '').localeCompare(a.registrado || a.data || ''));
@@ -2090,7 +2185,9 @@
   });
 
   // Perguntas Frequentes — sintetizadas a partir dos padrões mais comuns do histórico real
+  let FAQ = [];
   fetch('faq.json').then(r => r.json()).then(data => {
+    FAQ = data;
     const list = document.getElementById('faq-real-list');
     list.innerHTML = '';
     data.forEach((item, i) => {
@@ -2128,12 +2225,12 @@
   function renderJuris() {
     const list = document.getElementById('juris-list');
     const countEl = document.getElementById('juris-count');
-    const q = currentJurisQuery.trim().toLowerCase();
+    const qs = palavrasDe(currentJurisQuery);
     const filtered = JURIS.filter(j => {
       if (currentJurisCat !== 'all' && j.category !== currentJurisCat) return false;
-      if (!q) return true;
-      const haystack = (j.tribunal + ' ' + j.holding + ' ' + j.citation + ' ' + j.body).toLowerCase();
-      return q.split(/\s+/).filter(Boolean).every(w => haystack.includes(w));
+      if (!qs.length) return true;
+      textoBusca(j, '_h', x => x.tribunal + ' ' + x.holding + ' ' + x.citation + ' ' + x.body);
+      return qs.every(w => contemPalavra(j, '_h', w));
     });
     list.innerHTML = '';
     filtered.slice(0, 300).forEach(j => {
@@ -2202,13 +2299,299 @@
     renderLaws();
     document.getElementById('law-list-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+  // ===== Busca da tela inicial (Márcio, 13/11) =====
+  // Só roda com Enter ou clique na lupa; procura em todo o site, sem acento e sem maiúsculas;
+  // todas as palavras precisam aparecer. Os principais resultados aparecem no próprio quadro de vidro.
   const globalSearch = document.getElementById('search-input');
-  globalSearch.addEventListener('input', (e) => {
-    const v = e.target.value.trim();
-    if (v.length >= 2) goToLegislacaoSearch(v);
-  });
+  const stageEl = document.getElementById('stage');
+  const resumoEl = document.getElementById('gr-resumo');
+  const corpoEl = document.getElementById('gr-corpo');
+  const lockEl = document.getElementById('gr-lock');
+  const resultsEl = document.getElementById('glass-results');
+  const goBtn = document.getElementById('search-go');
+  const clearBtn = document.getElementById('search-clear');
+  let buscaAtual = '';
+  let buscaSeq = 0;
+  // palavras de ligação não restringem nem são destacadas ("prestação de contas" → prestacao + contas)
+  const LIGACAO = new Set(['a', 'o', 'e', 'de', 'da', 'do', 'das', 'dos', 'em', 'na', 'no', 'nas', 'nos', 'para', 'por', 'com', 'um', 'uma', 'as', 'os', 'ao', 'aos']);
+  const IDX = {};
+
+  function indice(id, ref, build) {
+    const c = IDX[id];
+    if (c && c.ref === ref) return c.itens;
+    const itens = build().map(it => {
+      it.ht = norm(it.t);
+      it.h = it.ht + ' ' + norm(it.m) + ' ' + norm(it.x);
+      return it;
+    });
+    IDX[id] = { ref, itens };
+    return itens;
+  }
+
+  function itensSecoes() {
+    const out = [];
+    const orgs = ['sccp', 'dcno', 'dcgpt', 'dcgc'];
+    orgs.forEach(v => {
+      const el = document.getElementById('view-' + v);
+      if (!el) return;
+      out.push({
+        t: el.querySelector('.page-title').textContent.trim(),
+        m: el.querySelector('.page-eyebrow').textContent.trim(),
+        x: [...el.querySelectorAll('.page-sub, .org-text')].map(n => n.textContent.trim()).join(' '),
+        abrir: () => goToView(v),
+      });
+    });
+    const vistos = new Set();
+    document.querySelectorAll('.quick-card[data-view]').forEach(c => {
+      const v = c.dataset.view;
+      if (orgs.includes(v)) return;
+      const t = c.querySelector('.quick-title').textContent.trim();
+      const chave = v + '|' + t;
+      if (vistos.has(chave)) return;
+      vistos.add(chave);
+      out.push({ t, m: 'Seção do site', x: [c.dataset.sub, c.querySelector('.quick-count').textContent.trim()].filter(Boolean).join(' '), abrir: () => goToView(v, c) });
+    });
+    return out;
+  }
+
+  const rotuloPlano = (k) => {
+    const b = document.querySelector('#plano-tabs .plan-tab[data-plano="' + k + '"]');
+    return b ? b.textContent.trim() : k.toUpperCase();
+  };
+  function abrirProjeto(k, id, consulta) {
+    goToView('projetos');
+    currentPlano = k;
+    document.querySelectorAll('#plano-tabs .plan-tab').forEach(b => b.classList.toggle('active', b.dataset.plano === k));
+    projFiltros = { diretoria: '', situacao: '', prioridade: '' };
+    projQuery = consulta || '';
+    document.getElementById('pf-busca').value = projQuery;
+    document.getElementById('pf-situacao').value = '';
+    currentProjSub = 'lista';
+    renderProjSub();
+    if (id) openProjetoDetail(id);
+  }
+
+  const GRUPOS = [
+    { id: 'secoes', nome: 'Seções do site', max: 4,
+      itens: () => indice('secoes', document, itensSecoes) },
+    { id: 'legislacao', nome: 'Legislação', max: 3,
+      itens: () => indice('legislacao', LAWS, () => LAWS.map(l => ({ t: l.title, m: l.tag + (l.meta ? ' · ' + l.meta : ''), x: (l.desc || '') + ' ' + (l.aliases || []).join(' '), href: l.url }))),
+      todos: (q) => goToLegislacaoSearch(q) },
+    { id: 'juris', nome: 'Jurisprudência', max: 3,
+      itens: () => indice('juris', JURIS, () => JURIS.map(j => ({ t: j.holding, m: j.tribunal + ' · ' + j.citation + (j.date ? ' · ' + j.date : ''), x: j.body, href: j.url || 'https://jurisprudencia.sigconsaida.mg.gov.br/' }))),
+      todos: (q) => {
+        goToView('jurisprudencia');
+        document.querySelectorAll('#juris-filters .cat-card').forEach(c => c.classList.toggle('active', c.dataset.cat === 'all'));
+        currentJurisCat = 'all';
+        document.getElementById('juris-search').value = q;
+        currentJurisQuery = q;
+        renderJuris();
+      } },
+    { id: 'faq', nome: 'Perguntas frequentes', max: 3,
+      itens: () => indice('faq', FAQ, () => FAQ.map((f, i) => ({ t: f.question, m: f.category, x: f.answer, abrir: () => {
+        goToView('faq');
+        document.querySelectorAll('#faq-real-list .faq-item').forEach((el, k) => el.classList.toggle('open', k === i));
+        const el = document.querySelectorAll('#faq-real-list .faq-item')[i];
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } }))) },
+    { id: 'contratos', nome: 'Contratos', max: 3, restrito: 'gestao', pronto: () => !!CONTRATOS,
+      itens: () => indice('contratos', CONTRATOS, () => CONTRATOS.processos.map(p => ({
+        t: (p.contrato ? 'Contrato ' + p.contrato : (p.instrumento || p.id)) + (p.contratada ? ' — ' + p.contratada : ''),
+        m: [p.status, p.fim ? 'vigência até ' + fmtDate(p.fim) : ''].filter(Boolean).join(' · '),
+        x: [p.objeto, p.gestor, p.gestorSuplente, p.fiscal, p.fiscalSuplente, p.sei, p.cnpj, p.categoria, p.instrumento, p.procCompras, p.obs].filter(Boolean).join(' · '),
+        abrir: () => { goToView('contratos'); openContratoDetail(p.id); },
+      }))),
+      todos: (q) => {
+        goToView('contratos');
+        document.getElementById('contratos-search').value = q;
+        contratosQuery = q;
+        renderContratosTabela();
+      } },
+    { id: 'projetos', nome: 'Projetos', max: 3, restrito: 'gestao', pronto: () => !!PROJETOS,
+      itens: () => indice('projetos', PROJETOS, () => Object.entries(PROJETOS.planos).flatMap(([k, pl]) => pl.tarefas.map(t => ({
+        t: t.nome,
+        m: [rotuloPlano(k), t.etapa, !t.aberta ? 'Concluído' : (t.atraso > 0 ? 'Atrasado' : 'Em aberto'), t.prazo ? 'prazo ' + fmtDate(t.prazo) : ''].filter(Boolean).join(' · '),
+        x: [...(t.frentes || []), ...(t.resp || []), ...(t.diretorias || []), t.notas, ...(t.motivos || []), ...(t.itens || [])].filter(Boolean).join(' · '),
+        abrir: () => abrirProjeto(k, t.id),
+      })))),
+      todos: (q) => abrirProjeto(currentPlano, null, q) },
+    { id: 'equipe', nome: 'Equipe', max: 4, restrito: 'gestao', pronto: () => !!PROJETOS,
+      itens: () => indice('equipe', PROJETOS, () => PROJETOS.equipe.grupos.flatMap(g => [...(g.perfis || []), ...(g.equipe || [])].map(p => ({
+        t: p.nome, m: [p.cargo, g.titulo].filter(Boolean).join(' · '),
+        x: [p.email, p.tel, p.ramal ? 'ramal ' + p.ramal : '', p.bio].filter(Boolean).join(' · '),
+        abrir: () => goToView('equipe'),
+      })))) },
+    { id: 'chamados', nome: 'Chamados antigos', max: 3, restrito: 'chamados', pronto: () => CHAMADOS.length > 0,
+      itens: () => indice('chamados', CHAMADOS, () => CHAMADOS.map(c => ({
+        t: c.subject || '(sem assunto)',
+        m: [c.type, c.institution, c.municipio, '#' + c.id].filter(Boolean).join(' · '),
+        x: (c.question || '') + ' ' + (c.answer || ''),
+        abrir: () => { goToView('chamados'); document.getElementById('chamado-search').value = buscaAtual; renderChamados(buscaAtual); },
+      }))),
+      todos: (q) => { goToView('chamados'); document.getElementById('chamado-search').value = q; renderChamados(q); } },
+  ];
+
+  function pontuar(it, ws, frase) {
+    for (const w of ws) if (!contemPalavra(it, 'h', w)) return 0;
+    let s = 1;
+    if (it.ht.includes(frase)) s += 12;
+    for (const w of ws) {
+      if (contemPalavra(it, 'ht', w)) {
+        s += 4;
+        if (new RegExp('(^|[^a-z0-9])' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).test(it.ht)) s += 2;
+      }
+    }
+    return s;
+  }
+
+  // trecho do texto em volta da 1ª palavra encontrada (a normalização preserva o tamanho do texto)
+  function trecho(texto, ws) {
+    if (!texto) return '';
+    const n = norm(texto);
+    if (n.length !== texto.length) return texto.slice(0, 170);
+    let pos = -1;
+    ws.forEach(w => { const i = n.indexOf(w); if (i >= 0 && (pos < 0 || i < pos)) pos = i; });
+    if (pos < 0) return texto.length <= 200 ? texto : '';
+    const ini = Math.max(0, pos - 60), fim = Math.min(texto.length, pos + 130);
+    return (ini > 0 ? '…' : '') + texto.slice(ini, fim).trim() + (fim < texto.length ? '…' : '');
+  }
+  function destacar(texto, ws) {
+    const n = norm(texto);
+    if (n.length !== texto.length) return esc(texto);
+    const marca = new Uint8Array(texto.length);
+    ws.forEach(w => {
+      let i = n.indexOf(w);
+      while (i >= 0) { marca.fill(1, i, i + w.length); i = n.indexOf(w, i + w.length); }
+    });
+    let html = '', dentro = false, buf = '';
+    for (let i = 0; i < texto.length; i++) {
+      if (!!marca[i] !== dentro) { html += dentro ? '<mark>' + esc(buf) + '</mark>' : esc(buf); buf = ''; dentro = !!marca[i]; }
+      buf += texto[i];
+    }
+    return html + (dentro ? '<mark>' + esc(buf) + '</mark>' : esc(buf));
+  }
+
+  function elItem(it, ws) {
+    const el = document.createElement(it.href ? 'a' : 'button');
+    el.className = 'gr-item';
+    if (it.href) { el.href = it.href; el.target = '_blank'; el.rel = 'noopener'; }
+    else { el.type = 'button'; el.addEventListener('click', it.abrir); }
+    const snip = trecho(it.x, ws);
+    el.innerHTML = '<span class="gr-t">' + destacar(it.t, ws) + '</span>' +
+      (it.m ? '<span class="gr-m">' + esc(it.m) + '</span>' : '') +
+      (snip ? '<span class="gr-s">' + destacar(snip, ws) + '</span>' : '');
+    return el;
+  }
+
+  async function destravarGestao() {
+    if (!GESTAO_PASSWORD) return;
+    const travado = (id) => document.getElementById(id).style.display !== 'none';
+    if (travado('gestao-lock')) await tryUnlockGestao(GESTAO_PASSWORD, true);
+    if (travado('projetos-lock')) await tryUnlockProjetos(GESTAO_PASSWORD, true);
+    if (travado('equipe-lock')) await tryUnlockEquipe(GESTAO_PASSWORD, true);
+  }
+
+  function renderTravas() {
+    lockEl.innerHTML = '';
+    const linhas = [];
+    if (!(CONTRATOS && PROJETOS)) linhas.push({ id: 'gestao', rotulo: 'Gestão SCCP — Contratos, Projetos e Equipe' });
+    if (!CHAMADOS.length) linhas.push({ id: 'chamados', rotulo: 'Chamados antigos (Freshdesk)' });
+    lockEl.style.display = linhas.length ? '' : 'none';
+    if (!linhas.length) return;
+    lockEl.innerHTML = '<p class="gr-lock-title">🔒 Áreas restritas ainda fora da busca. Informe a senha para incluí-las:</p>';
+    linhas.forEach(l => {
+      const row = document.createElement('div');
+      row.className = 'gr-lock-row';
+      row.innerHTML = '<span class="rot"></span><input type="password" autocomplete="off" placeholder="Senha de acesso"><button type="button">Incluir na busca</button><span class="err" hidden></span>';
+      row.querySelector('.rot').textContent = l.rotulo;
+      const inp = row.querySelector('input'), btn = row.querySelector('button'), err = row.querySelector('.err');
+      const liberar = async () => {
+        if (!inp.value) { inp.focus(); return; }
+        btn.disabled = true; err.hidden = true;
+        if (l.id === 'gestao') {
+          await tryUnlockGestao(inp.value, true);
+          if (CONTRATOS) { await tryUnlockProjetos(inp.value, true); await tryUnlockEquipe(inp.value, true); }
+        } else {
+          await tryUnlockChamados(inp.value, true);
+        }
+        const ok = l.id === 'gestao' ? !!(CONTRATOS && PROJETOS) : CHAMADOS.length > 0;
+        if (ok) executarBusca();
+        else { btn.disabled = false; err.textContent = 'Senha incorreta. Tente novamente.'; err.hidden = false; inp.select(); }
+      };
+      btn.addEventListener('click', liberar);
+      inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') liberar(); });
+      lockEl.appendChild(row);
+    });
+  }
+
+  async function executarBusca() {
+    const q = globalSearch.value.trim();
+    if (!q) { fecharBusca(); globalSearch.focus(); return; }
+    const seq = ++buscaSeq;
+    buscaAtual = q;
+    stageEl.classList.add('stage--busca');
+    resumoEl.textContent = 'Buscando…';
+    corpoEl.innerHTML = '';
+    await destravarGestao();
+    if (seq !== buscaSeq) return;
+
+    const todas = palavrasDe(q);
+    const uteis = todas.filter(w => !LIGACAO.has(w));
+    const ws = uteis.length ? uteis : todas;
+    const frase = todas.join(' ');
+    let total = 0;
+    const frag = document.createDocumentFragment();
+    GRUPOS.forEach(g => {
+      if (g.pronto && !g.pronto()) return;
+      const achados = [];
+      g.itens().forEach(it => { const s = pontuar(it, ws, frase); if (s) achados.push({ it, s }); });
+      if (!achados.length) return;
+      achados.sort((a, b) => b.s - a.s);
+      total += achados.length;
+      const sec = document.createElement('section');
+      sec.className = 'gr-grupo';
+      const head = document.createElement('div');
+      head.className = 'gr-grupo-head';
+      head.innerHTML = '<h3></h3><span class="gr-n">' + achados.length + '</span>';
+      head.querySelector('h3').textContent = g.nome;
+      if (g.todos && achados.length > g.max) {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'gr-todos';
+        b.textContent = 'Ver todos os ' + achados.length + ' →';
+        b.addEventListener('click', () => g.todos(q));
+        head.appendChild(b);
+      }
+      sec.appendChild(head);
+      achados.slice(0, g.max).forEach(r => sec.appendChild(elItem(r.it, ws)));
+      frag.appendChild(sec);
+    });
+    if (!total) {
+      const v = document.createElement('p');
+      v.className = 'gr-vazio';
+      v.textContent = 'Nada encontrado para “' + q + '”. Confira a grafia ou tente menos palavras.';
+      frag.appendChild(v);
+    }
+    corpoEl.innerHTML = '';
+    corpoEl.appendChild(frag);
+    resumoEl.innerHTML = total ? '<strong>' + total + '</strong> resultado' + (total > 1 ? 's' : '') + ' para “' + esc(q) + '”' : '';
+    renderTravas();
+    resultsEl.scrollTop = 0;
+  }
+
+  function fecharBusca() {
+    buscaSeq++;
+    stageEl.classList.remove('stage--busca');
+    corpoEl.innerHTML = ''; resumoEl.textContent = ''; lockEl.innerHTML = '';
+  }
+
   globalSearch.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && e.target.value.trim()) goToLegislacaoSearch(e.target.value.trim());
+    if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); executarBusca(); }
+    else if (e.key === 'Escape' && stageEl.classList.contains('stage--busca')) fecharBusca();
+  });
+  globalSearch.addEventListener('input', () => { clearBtn.hidden = !globalSearch.value; });
+  goBtn.addEventListener('click', executarBusca);
+  clearBtn.addEventListener('click', () => {
+    globalSearch.value = ''; clearBtn.hidden = true; fecharBusca(); globalSearch.focus();
   });
 
   // Reserva da tela inicial: o selo estático (mesma imagem da barra), caso o 3D não carregue.
