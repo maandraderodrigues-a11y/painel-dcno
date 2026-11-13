@@ -14,31 +14,31 @@
        vermelho e grafite sobre fundo branco, inspirados no selo/identidade da SCCP. */
     --mg-red-official: #ff0000;
 
-    --bg: #faf8f6;
+    --bg: #fff4ef;
     --surface: #ffffff;
-    --surface-2: #f4f1ee;
-    --surface-sunken: #efebe7;
-    --border: #e7e2dd;
-    --border-strong: #d2cbc3;
+    --surface-2: #fdebe5;
+    --surface-sunken: #f9e2db;
+    --border: #f2cfc8;
+    --border-strong: #e5b0a6;
 
     --surface-dark: #1f1f1f;
     --surface-dark-2: #2a2a2a;
 
-    --ink-primary: #231f1c;
-    --ink-secondary: #5c554f;
-    --ink-muted: #8a827b;
+    --ink-primary: #2a1215;
+    --ink-secondary: #5e3a40;
+    --ink-muted: #8a5f67;
     --ink-on-dark: #f3efea;
     --ink-on-dark-muted: #b3a9a0;
 
     --accent: #e30613;
     --accent-ink: #ffffff;
-    --accent-soft-bg: #fce8e9;
+    --accent-soft-bg: #fddcdc;
     --accent-soft-ink: #a8000f;
     --wine: #6b0010;
 
-    --shadow-sm: 0 1px 2px rgba(50,40,30,0.07);
-    --shadow-md: 0 4px 16px rgba(50,40,30,0.10);
-    --shadow-lg: 0 12px 32px rgba(50,40,30,0.16);
+    --shadow-sm: 0 1px 2px rgba(120,25,25,0.09);
+    --shadow-md: 0 4px 16px rgba(120,25,25,0.12);
+    --shadow-lg: 0 12px 32px rgba(120,25,25,0.18);
 
     --radius-sm: 8px;
     --radius-md: 12px;
@@ -111,16 +111,16 @@
   :root {
     --gtbar-h: 60px;
     /* barra cinza-claro translúcida (Márcio, 13/11) + quadro de vidro da tela inicial */
-    --gtbar-bg: rgba(236,234,232,0.55);
-    --gtbar-border: rgba(0,0,0,0.08);
-    --gtbar-ink: #1f1f1f;
-    --gtbar-muted: #5c554f;
-    --gtbar-hover: rgba(0,0,0,0.06);
+    --gtbar-bg: rgba(255,255,255,0.82);
+    --gtbar-border: rgba(227,6,19,0.55);
+    --gtbar-ink: #2a1215;
+    --gtbar-muted: #5e3a40;
+    --gtbar-hover: rgba(227,6,19,0.08);
     --gtbar-btn-bg: rgba(255,255,255,0.55);
-    --gtbar-btn-border: rgba(0,0,0,0.12);
+    --gtbar-btn-border: rgba(227,6,19,0.25);
     --glass-bg: rgba(255,255,255,0.28);
     --glass-border: rgba(255,255,255,0.7);
-    --glass-ink: #1f1f1f;
+    --glass-ink: #2a1215;
   }
   :root[data-theme="dark"] {
     --gtbar-bg: rgba(72,70,68,0.45); --gtbar-border: rgba(255,255,255,0.1);
@@ -481,7 +481,7 @@
     display: flex; flex-direction: column; align-items: center; text-align: center;
     gap: 8px;
     padding: 20px 12px 16px;
-    background: var(--surface-2);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     cursor: pointer;
@@ -495,11 +495,11 @@
   }
   .cat-ic {
     width: 52px; height: 52px; border-radius: 14px;
-    background: var(--surface); color: var(--ink-primary);
+    background: var(--accent); color: #fff;
     display: flex; align-items: center; justify-content: center;
     box-shadow: var(--shadow-sm);
   }
-  .cat-card.active .cat-ic { color: var(--accent-soft-ink); }
+  .cat-card.active .cat-ic { background: var(--accent-deep, #a8000f); color: #fff; }
   .cat-label { font-size: 13.5px; font-weight: 700; color: var(--ink-primary); }
   .cat-count { font-size: 11px; color: var(--ink-muted); }
   .cat-card.active .cat-count { color: var(--accent-soft-ink); }
