@@ -2550,7 +2550,12 @@ function iniciar() {
     if ((ativos.size || ativosCor.size) && visivel && !document.hidden) requestAnimationFrame(quadro);
     else rodando = false;
   }
-  function desenhar() { renderer.render(cena, camera); }
+  function desenhar() {
+    // marca os buffers de instância como sujos antes de desenhar: sem isso o primeiro
+    // quadro no site publicado saía sem os triângulos (só apareciam ao mover o mouse)
+    meshes.forEach(m => { if (m) { m.instanceMatrix.needsUpdate = true; if (m.instanceColor) m.instanceColor.needsUpdate = true; } });
+    renderer.render(cena, camera);
+  }
 
   // ---------------- ponteiro (mouse, caneta e toque) ----------------
   const ray = new T.Raycaster(), ndc = new T.Vector2();
