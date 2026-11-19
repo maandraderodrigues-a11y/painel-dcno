@@ -71,5 +71,30 @@
       ]
     }
   ],
-  "aniversarios": []
+  "aniversarios": [
+    { "nome": "Marcio Rodrigues", "dia": 4, "mes": 2 },
+    { "nome": "Kamila Gonçalves", "dia": 4, "mes": 12 },
+    { "nome": "Queila Nunes", "dia": 16, "mes": 7 },
+    { "nome": "Cristiane Vieira", "dia": 20, "mes": 8 },
+    { "nome": "Elizabete Kelle", "dia": 30, "mes": 10 },
+    { "nome": "Gislaine Martelo", "dia": 29, "mes": 10 },
+    { "nome": "Lucia Helena", "dia": 16, "mes": 10 },
+    { "nome": "Luciana Melo", "dia": 24, "mes": 3 },
+    { "nome": "Marilia Brandão", "dia": 21, "mes": 4 },
+    { "nome": "Paula Cabral", "dia": 17, "mes": 9 },
+    { "nome": "Tatiana Albernaz", "dia": 13, "mes": 11 },
+    { "nome": "Vinicius Mesquita", "dia": 13, "mes": 7 },
+    { "nome": "Wallace Bandeira", "dia": 4, "mes": 11 },
+    { "nome": "Lídia Botelho", "dia": 6, "mes": 3 },
+    { "nome": "Gerda Oliveira", "dia": 28, "mes": 10 },
+    { "nome": "Jessica Ribeiro", "dia": 23, "mes": 12 },
+    { "nome": "Lucas Zaurisio", "dia": 11, "mes": 5 },
+    { "nome": "Tatiane Martins", "dia": 21, "mes": 1 },
+    { "nome": "Emanuelle Fraga", "dia": 25, "mes": 5 },
+    { "nome": "Beatriz Veloso", "dia": 28, "mes": 8 },
+    { "nome": "João Augusto", "dia": 20, "mes": 3 },
+    { "nome": "Liziane Coura", "dia": 14, "mes": 6 },
+    { "nome": "Luísa Andrade", "dia": 29, "mes": 7 },
+    { "nome": "Maria Paula Papini", "dia": 22, "mes": 8 }
+  ]
 }
