@@ -733,6 +733,19 @@
   .eq-modal-bio { font-size: 13px; color: var(--ink-secondary); line-height: 1.6; text-align: justify; margin: 0; }
   .eq-modal-empty { font-size: 13px; color: var(--ink-muted); margin: 0; }
 
+  .eq-emerg { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); text-align: left; }
+  .eq-emerg-title { font-size: 12.5px; font-weight: 800; margin: 0 0 10px; display: flex; align-items: center; gap: 6px; }
+  .eq-emerg-locked { display: flex; flex-direction: column; gap: 8px; }
+  .eq-emerg-locked input { font-size: 13px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); color: var(--ink-primary); }
+  .eq-emerg-locked .eq-emerg-row { display: flex; gap: 8px; }
+  .eq-emerg-locked .eq-emerg-row input { flex: 1; }
+  .eq-emerg-hint { font-size: 11px; color: var(--ink-muted); margin: 0; }
+  .eq-emerg-err { font-size: 11.5px; color: var(--accent); margin: 0; display: none; }
+  .eq-emerg-item { font-size: 12.5px; color: var(--ink-secondary); padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .eq-emerg-item:last-child { border-bottom: none; }
+  .eq-emerg-item b { color: var(--ink-primary); }
+  .eq-emerg-empty { font-size: 12.5px; color: var(--ink-muted); margin: 0; }
+
   .eq-bday-panel { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); padding: 16px 18px; margin-bottom: 24px; }
   .eq-bday-title { font-size: 13.5px; font-weight: 800; margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
   .eq-bday-list { display: flex; flex-direction: column; gap: 8px; }
@@ -2170,12 +2183,65 @@
           <div class="eq-name">${esc(p.nome)}</div>
           ${p.cargo ? `<span class="eq-role">${esc(p.cargo)}</span>` : ''}
           ${p.bio ? `<p class="eq-modal-bio">${esc(p.bio)}</p>` : `<p class="eq-modal-empty">Sem descrição disponível.</p>`}
+          <div class="eq-emerg" id="eq-emerg-root"></div>
         </div>
       </div>`;
     const fechar = () => { root.innerHTML = ''; };
     root.querySelector('.eq-modal-close').addEventListener('click', fechar);
     root.querySelector('.eq-modal-backdrop').addEventListener('click', (e) => { if (e.target === e.currentTarget) fechar(); });
     document.addEventListener('keydown', function onEsc(e) { if (e.key === 'Escape') { fechar(); document.removeEventListener('keydown', onEsc); } });
+    renderEmergenciaSecao(p);
+  }
+
+  // Contato de emergência — dado sensível de terceiros (nome/telefone de quem a
+  // própria pessoa indicou), por isso cifrado com a mesma senha da Gestão SCCP
+  // (Contratos/Projetos), mesmo a aba Equipe agora sendo pública.
+  let EMERGENCIA = null;
+  async function loadEmergenciaData(password) {
+    if (EMERGENCIA) return;
+    const payload = await fetch('equipe_emergencia_encrypted.json').then(r => r.json());
+    const key = await deriveKey(password, payload.salt, payload.iterations);
+    const iv = b64ToBytes(payload.iv);
+    const cipherBytes = b64ToBytes(payload.ciphertext);
+    const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipherBytes);
+    EMERGENCIA = JSON.parse(new TextDecoder().decode(plainBuf));
+    GESTAO_PASSWORD = password;
+  }
+
+  function conteudoEmergencia(p) {
+    const lista = (EMERGENCIA && EMERGENCIA[p.nome]) || [];
+    return `
+      <p class="eq-emerg-title">🚨 Contato de emergência</p>
+      ${lista.length ? lista.map(c => `
+        <div class="eq-emerg-item"><b>${esc(c.nome)}</b>${c.parentesco ? ' · ' + esc(c.parentesco) : ''}${c.telefone ? ' · ' + esc(c.telefone) : ''}</div>`).join('')
+        : '<p class="eq-emerg-empty">Nenhum contato de emergência cadastrado.</p>'}`;
+  }
+
+  function renderEmergenciaSecao(p) {
+    const root = document.getElementById('eq-emerg-root');
+    if (!root) return;
+    if (EMERGENCIA) { root.innerHTML = conteudoEmergencia(p); return; }
+    root.innerHTML = `
+      <p class="eq-emerg-title">🚨 Contato de emergência</p>
+      <div class="eq-emerg-locked">
+        <p class="eq-emerg-hint">Dado restrito — mesma senha da Gestão SCCP (Contratos/Projetos).</p>
+        <div class="eq-emerg-row">
+          <input type="password" id="eq-emerg-pass" placeholder="Senha de acesso" autocomplete="off">
+          <button type="button" class="btn-red" id="eq-emerg-btn">Ver</button>
+        </div>
+        <p class="eq-emerg-err" id="eq-emerg-err">Senha incorreta. Tente novamente.</p>
+      </div>`;
+    const tentar = async () => {
+      const inp = document.getElementById('eq-emerg-pass');
+      const err = document.getElementById('eq-emerg-err');
+      if (!inp.value) { inp.focus(); return; }
+      err.style.display = 'none';
+      try { await loadEmergenciaData(inp.value); renderEmergenciaSecao(p); }
+      catch (e) { err.style.display = 'block'; }
+    };
+    document.getElementById('eq-emerg-btn').addEventListener('click', tentar);
+    document.getElementById('eq-emerg-pass').addEventListener('keydown', (e) => { if (e.key === 'Enter') tentar(); });
+    if (GESTAO_PASSWORD) loadEmergenciaData(GESTAO_PASSWORD).then(() => renderEmergenciaSecao(p)).catch(() => {});
   }
 
   function renderAniversariantes() {
