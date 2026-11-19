@@ -628,6 +628,7 @@
   .status-andamento { background: var(--surface-sunken); color: var(--ink-secondary); }
   .status-finalizado { background: var(--surface-sunken); color: var(--ink-muted); }
   .status-suspenso, .status-iniciar { background: var(--accent-soft-bg); color: var(--accent-soft-ink); }
+  .status-urgente { background: var(--accent); color: #fff; }
   .mini-meter { height: 6px; border-radius: 3px; background: var(--surface-sunken); overflow: hidden; margin-top: 4px; width: 90px; }
   .mini-meter i { display: block; height: 100%; background: var(--accent); }
 
@@ -703,6 +704,39 @@
   .risk-alto::before { background: #fff; }
   tr.area-row { cursor: pointer; }
   tr.area-row:hover td { background: var(--surface-sunken); }
+
+  /* Contratos — dashboard (donut + evolução), pessoas, prazos */
+  .contr-two { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 26px; }
+  @media (min-width: 760px) { .contr-two { grid-template-columns: 1fr 1fr; } }
+  .contr-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; box-shadow: var(--shadow-sm); cursor: pointer; text-align: left; font-family: inherit; }
+  .contr-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-md); }
+  .contr-card h3 { font-size: 13.5px; font-weight: 800; margin: 0 0 14px; }
+  .contr-donut-row { display: flex; align-items: center; gap: 18px; }
+  .contr-donut {
+    width: 84px; height: 84px; border-radius: 50%; flex-shrink: 0;
+    background: conic-gradient(var(--accent) calc(var(--pct) * 1%), var(--surface-sunken) 0);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .contr-donut span { width: 60px; height: 60px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: var(--accent-soft-ink); }
+  .contr-cap { font-size: 12.5px; color: var(--ink-secondary); line-height: 1.5; }
+  .contr-cap b { color: var(--ink-primary); }
+  .contr-link { display: block; font-size: 11.5px; color: var(--accent-soft-ink); font-weight: 700; margin-top: 6px; }
+  .contr-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11px; color: var(--ink-secondary); margin-bottom: 8px; }
+  .contr-legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; margin-right: 4px; vertical-align: -1px; }
+  .contr-bar { height: 12px; border-radius: 6px; background: var(--surface-sunken); overflow: hidden; display: flex; margin-bottom: 8px; }
+  .contr-bar i { display: block; height: 100%; }
+
+  .pessoa-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 10px; }
+  .pessoa-nome { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .pessoa-papel { display: inline-block; font-size: 10.5px; font-weight: 700; background: var(--surface-sunken); color: var(--ink-secondary); border-radius: 100px; padding: 2px 9px; margin: 0 6px 6px 0; }
+  .pessoa-contratos { font-size: 12px; color: var(--ink-secondary); }
+  .pessoa-contratos a.contr-link-item { display: inline; color: var(--accent-soft-ink); cursor: pointer; font-weight: 600; }
+
+  .gloss-details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 16px; }
+  .gloss-details summary { font-size: 13px; font-weight: 700; cursor: pointer; }
+  .gloss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px 18px; margin-top: 14px; }
+  .gloss-grid b { display: block; font-size: 12px; margin-bottom: 2px; }
+  .gloss-grid span { font-size: 11.5px; color: var(--ink-secondary); line-height: 1.4; }
 
   .eq-group { margin-bottom: 26px; }
   .eq-group-title { font-size: 15px; font-weight: 800; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
@@ -1140,32 +1174,127 @@
         </div>
 
         <div id="contratos-content" style="display:none;">
-          <div class="kpi-row" id="contratos-kpis"></div>
-
-          <div class="section">
-            <div class="section-head"><h2 class="section-title">Atenção agora</h2></div>
-            <div id="contratos-alerts" class="updates-list"></div>
+          <div class="subtabs" id="contr-subtabs">
+            <button type="button" class="subtab active" data-sub="dashboard">Dashboard</button>
+            <button type="button" class="subtab" data-sub="processos">Contratos</button>
+            <button type="button" class="subtab" data-sub="pagamentos">Pagamentos</button>
+            <button type="button" class="subtab" data-sub="prazos">Prazos</button>
+            <button type="button" class="subtab" data-sub="pessoas">Gestores e fiscais</button>
+            <button type="button" class="subtab" data-sub="alertas">Alertas</button>
+            <button type="button" class="subtab" data-sub="historico">Histórico</button>
           </div>
 
-          <div class="search-box" style="max-width:none; margin-bottom:14px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-            <input type="text" placeholder="Buscar por contrato, contratada, gestor ou fiscal…" id="contratos-search">
+          <!-- DASHBOARD -->
+          <div id="contr-sub-dashboard">
+            <div class="kpi-row" id="contratos-kpis"></div>
+            <div class="contr-two" id="contr-donuts"></div>
+            <div class="section">
+              <div class="section-head"><h2 class="section-title">Atenção agora</h2></div>
+              <div id="contratos-alerts" class="updates-list"></div>
+            </div>
+            <div class="section">
+              <div class="section-head"><h2 class="section-title">Próximos prazos</h2></div>
+              <div id="contr-proximos-prazos" class="updates-list"></div>
+            </div>
+            <details class="gloss-details">
+              <summary>Como ler esta página (glossário)</summary>
+              <div class="gloss-grid" id="contr-glossario"></div>
+            </details>
           </div>
 
-          <div class="dcno-tablewrap">
-            <table class="dcno-table" id="contratos-table">
-              <thead>
-                <tr>
-                  <th>Contrato</th><th>Contratada</th><th>Status</th><th>Vigência até</th>
-                  <th>Gestor</th><th class="num">Valor total</th><th class="num">Executado</th>
-                </tr>
-              </thead>
-              <tbody id="contratos-tbody"></tbody>
-            </table>
+          <!-- CONTRATOS (PROCESSOS) -->
+          <div id="contr-sub-processos" style="display:none;">
+            <div class="filters-row">
+              <select id="pcf-status">
+                <option value="">Todos os status</option>
+                <option>Em andamento</option>
+                <option>A iniciar</option>
+                <option>Finalizado</option>
+                <option>Suspenso</option>
+              </select>
+              <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" placeholder="Buscar por contrato, contratada, gestor ou fiscal…" id="contratos-search">
+              </div>
+            </div>
+            <div class="dcno-tablewrap">
+              <table class="dcno-table" id="contratos-table">
+                <thead>
+                  <tr>
+                    <th>Contrato</th><th>Contratada</th><th>Status</th><th>Vigência até</th>
+                    <th>Gestor</th><th class="num">Valor total</th><th class="num">Executado</th>
+                  </tr>
+                </thead>
+                <tbody id="contratos-tbody"></tbody>
+              </table>
+            </div>
+            <p class="law-note" id="contratos-count"></p>
+            <div id="contrato-detail"></div>
           </div>
-          <p class="law-note" id="contratos-count"></p>
 
-          <div id="contrato-detail"></div>
+          <!-- PAGAMENTOS -->
+          <div id="contr-sub-pagamentos" style="display:none;">
+            <div class="filters-row">
+              <select id="pgf-status">
+                <option value="">Todos os status</option>
+                <option value="aberto">Em aberto</option>
+                <option>Atrasado</option>
+                <option>Pendente</option>
+                <option>Parcial</option>
+                <option>Quitado</option>
+                <option>Aguardando nota</option>
+                <option>Aguardando leitura</option>
+              </select>
+            </div>
+            <div class="dcno-tablewrap">
+              <table class="dcno-table" id="pagamentos-table">
+                <thead>
+                  <tr><th>Contrato</th><th>Competência</th><th>NF</th><th>Status</th><th class="num">Valor</th><th class="num">Pago</th><th class="num">Saldo</th><th>Vencimento</th></tr>
+                </thead>
+                <tbody id="pagamentos-tbody"></tbody>
+              </table>
+            </div>
+            <p class="law-note" id="pagamentos-count"></p>
+          </div>
+
+          <!-- PRAZOS -->
+          <div id="contr-sub-prazos" style="display:none;">
+            <div class="filters-row">
+              <select id="przf-status">
+                <option value="abertos">Em aberto</option>
+                <option value="concluidos">Concluídos</option>
+                <option value="todos">Todos</option>
+              </select>
+            </div>
+            <div id="prazos-list" class="updates-list"></div>
+            <p class="law-note" id="prazos-count"></p>
+          </div>
+
+          <!-- GESTORES E FISCAIS -->
+          <div id="contr-sub-pessoas" style="display:none;">
+            <div id="pessoas-list"></div>
+          </div>
+
+          <!-- ALERTAS -->
+          <div id="contr-sub-alertas" style="display:none;">
+            <div class="filters-row">
+              <select id="alf-sev">
+                <option value="">Todas as severidades</option>
+                <option value="urgente">Urgente</option>
+                <option value="atencao">Atenção</option>
+                <option value="info">Acompanhar</option>
+              </select>
+            </div>
+            <div id="alertas-list" class="updates-list"></div>
+            <p class="law-note" id="alertas-count"></p>
+          </div>
+
+          <!-- HISTÓRICO -->
+          <div id="contr-sub-historico" style="display:none;">
+            <div id="contr-historico-list"></div>
+          </div>
+
+          <p class="law-note" id="contratos-atualizado"></p>
         </div>
       </div>
 
@@ -1631,21 +1760,28 @@
   });
 
   // ===== Contratos (Gestão SCCP) =====
-  let CONTRATOS = null; // { processos, movimentos, pagamentos, historico }
+  let CONTRATOS = null; // { processos, movimentos, pagamentos, historico, geradoEm }
   let contratosQuery = '';
+  let contrSub = 'dashboard';
+  let pcfStatus = '';
+  let pgfStatus = '';
+  let przfStatus = 'abertos';
+  let alfSev = '';
   const fmtMoney = (v) => (v == null ? '—' : 'R$ ' + Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+  const fmtMoneyK = (v) => { v = Number(v) || 0; return Math.abs(v) >= 1e6 ? 'R$ ' + (v / 1e6).toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' mi' : Math.abs(v) >= 1e3 ? 'R$ ' + (v / 1e3).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' mil' : fmtMoney(v); };
   const fmtDate = (iso) => {
     if (!iso) return '—';
-    const [y, m, d] = iso.split('-');
+    const [y, m, d] = String(iso).slice(0, 10).split('-');
     return d && m && y ? `${d}/${m}/${y}` : iso;
   };
   const daysUntil = (iso) => {
     if (!iso) return null;
-    const target = new Date(iso + 'T00:00:00');
+    const target = new Date(String(iso).slice(0, 10) + 'T00:00:00');
     const now = new Date();
     now.setHours(0, 0, 0, 0);
     return Math.round((target - now) / 86400000);
   };
+  const diasRotulo = (n) => n === null ? '' : n === 0 ? 'vence hoje' : n > 0 ? `vence em ${n} dia${n > 1 ? 's' : ''}` : `venceu há ${-n} dia${n < -1 ? 's' : ''}`;
   const statusClass = (s) => {
     const k = (s || '').toLowerCase();
     if (k.includes('final')) return 'status-finalizado';
@@ -1653,86 +1789,216 @@
     if (k.includes('iniciar')) return 'status-iniciar';
     return 'status-andamento';
   };
+  const procName = (p) => p ? (p.contrato ? (/cooper/i.test(p.instrumento || '') ? 'Acordo ' : 'Contrato ') + p.contrato : 'Processo ' + (p.sei || p.id)) : 'Processo removido';
+  const nomesLista = (s) => String(s || '').split(/;|\n/).map(x => x.trim()).filter(Boolean);
+  const fiscaisDe = (p) => nomesLista(p.fiscal).concat(nomesLista(p.fiscalSuplente));
+  const lastDayOfMonth = (ym) => { const [y, m] = ym.split('-').map(Number); const d = new Date(y, m, 0).getDate(); return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`; };
 
-  function computeAlertas(processos) {
-    const alerts = [];
-    const seiCount = {};
-    processos.forEach(p => { if (p.sei) seiCount[p.sei] = (seiCount[p.sei] || 0) + 1; });
+  function pagStatus(g) {
+    if (g.leitura === 'Aguardando leitura' && !Number(g.valor)) return 'Aguardando leitura';
+    if (!Number(g.valor) && !g.recebidaEm) return 'Aguardando nota';
+    const saldo = (Number(g.valor) || 0) - (Number(g.valorPago) || 0) - (Number(g.glosa) || 0);
+    if (saldo <= 0.005) return 'Quitado';
+    if (g.vencimento && daysUntil(g.vencimento) < 0) return 'Atrasado';
+    if (Number(g.valorPago) > 0) return 'Parcial';
+    return 'Pendente';
+  }
+  const saldoNota = (g) => Math.max(0, (Number(g.valor) || 0) - (Number(g.valorPago) || 0) - (Number(g.glosa) || 0));
+  const PAG_PILL_CLASS = { Quitado: 'status-finalizado', Atrasado: 'status-urgente', Parcial: 'status-suspenso', Pendente: 'status-iniciar', 'Aguardando nota': 'status-andamento', 'Aguardando leitura': 'status-andamento' };
+  const isPagAberto = (g) => ['Atrasado', 'Pendente', 'Parcial'].includes(pagStatus(g));
 
-    processos.forEach(p => {
-      const nome = p.contrato ? 'Contrato ' + p.contrato : (p.instrumento || p.id);
-      const dias = daysUntil(p.fim);
-      const naoFinalizado = !(p.status || '').toLowerCase().includes('final');
+  function finance(p) {
+    const notas = (CONTRATOS.pagamentos || []).filter(g => g.processoId === p.id);
+    const faturado = notas.reduce((a, g) => a + (Number(g.valor) || 0), 0);
+    const pago = notas.reduce((a, g) => a + (Number(g.valorPago) || 0), 0);
+    const aPagar = notas.reduce((a, g) => a + saldoNota(g), 0);
+    const total = Number(p.valorTotal) || 0;
+    const e = p.exec;
+    if (e && Number(e.empenhado) >= 0) {
+      const emp = Number(e.empenhado) || 0, liq = Number(e.liquidado) || 0;
+      return { notas, exec: true, faturado: emp, pago: liq, aPagar, total, saldo: total - emp, pct: total ? emp / total : 0, pctLiq: total ? liq / total : 0 };
+    }
+    return { notas, exec: false, faturado, pago, aPagar, total, saldo: total - faturado, pct: total ? faturado / total : 0, pctLiq: total ? pago / total : 0 };
+  }
+  function execTotals() {
+    return CONTRATOS.processos.reduce((T, p) => { const f = finance(p); T.tot += f.total; T.liq += f.pago; T.pend += Math.max(0, f.faturado - f.pago); T.saldo += Math.max(0, f.saldo); return T; }, { tot: 0, liq: 0, pend: 0, saldo: 0 });
+  }
 
-      if (dias !== null && dias < 0 && naoFinalizado) {
-        alerts.push({ sev: 'urgente', titulo: nome + ' — vigência encerrada', detalhe: `Venceu em ${fmtDate(p.fim)} e ainda consta "${p.status}".`, id: p.id });
-      } else if (dias !== null && dias >= 0 && dias <= 30 && naoFinalizado) {
-        alerts.push({ sev: 'urgente', titulo: nome + ' — vigência vence em ' + dias + ' dia(s)', detalhe: `Termina em ${fmtDate(p.fim)}.`, id: p.id });
-      } else if (dias !== null && dias <= 90 && naoFinalizado) {
-        alerts.push({ sev: 'atencao', titulo: nome + ' — vigência vence em até 90 dias', detalhe: `Termina em ${fmtDate(p.fim)}.`, id: p.id });
-      } else if (dias !== null && dias <= 180 && naoFinalizado) {
-        alerts.push({ sev: 'info', titulo: nome + ' — acompanhar vigência', detalhe: `Termina em ${fmtDate(p.fim)} (até 180 dias).`, id: p.id });
+  const SEV_ORDER = { urgente: 0, atencao: 1, info: 2 };
+  const SEV_LABEL = { urgente: 'Urgente', atencao: 'Atenção', info: 'Acompanhar' };
+
+  function allDeadlines() {
+    const list = (CONTRATOS.prazos || []).map(z => ({ ...z, auto: false }));
+    CONTRATOS.processos.forEach(p => {
+      if (p.status === 'Finalizado') return;
+      if (p.fim) list.push({ id: 'auto-fim-' + p.id, processoId: p.id, descricao: 'Fim da vigência do contrato', data: p.fim, concluido: false, auto: true, responsavel: p.gestor });
+      if (p.status === 'A iniciar' && p.inicio) list.push({ id: 'auto-ini-' + p.id, processoId: p.id, descricao: 'Início previsto dos serviços', data: p.inicio, concluido: false, auto: true, responsavel: p.gestor });
+    });
+    return list.sort((a, b) => (a.data || '').localeCompare(b.data || ''));
+  }
+  function prazoPillClass(z) {
+    if (z.concluido) return 'status-finalizado';
+    const d = daysUntil(z.data);
+    if (d !== null && d < 0) return 'status-urgente';
+    if (d !== null && d <= 30) return 'status-suspenso';
+    return 'status-andamento';
+  }
+  const prazoRotulo = (z) => z.concluido ? 'Concluído' : diasRotulo(daysUntil(z.data));
+
+  function computeAlertas() {
+    const C = CONTRATOS, out = [];
+    const add = (sev, procId, titulo, detalhe, data, tipo) => out.push({ sev, procId, titulo, detalhe: detalhe || '', data: data || '', tipo });
+    const seiCount = {}, prefCount = {};
+    C.processos.forEach(p => { if (p.sei) { seiCount[p.sei] = (seiCount[p.sei] || 0) + 1; const k = p.sei.slice(0, 4); prefCount[k] = (prefCount[k] || 0) + 1; } });
+    const prefixoComum = Object.entries(prefCount).sort((a, b) => b[1] - a[1])[0]?.[0];
+    const semGestor = [], semFiscal = [];
+
+    C.processos.forEach(p => {
+      const nome = procName(p), f = finance(p), naoFinal = p.status !== 'Finalizado';
+      if (p.status === 'Em andamento' && p.fim) {
+        const d = daysUntil(p.fim);
+        if (d < 0) add('urgente', p.id, `${nome} — vigência encerrada há ${-d} dia${-d > 1 ? 's' : ''}, mas consta como vigente`, `${p.contratada || ''}: a vigência terminou em ${fmtDate(p.fim)} e a situação ainda é "${p.situacaoPlanilha || p.status}".`, p.fim, 'Vigência');
+        else if (d <= 180) add(d <= 30 ? 'urgente' : d <= 90 ? 'atencao' : 'info', p.id, `${nome} — vigência ${diasRotulo(d)}`, `${p.contratada || ''} termina em ${fmtDate(p.fim)}.`, p.fim, 'Vigência');
       }
-
-      if (!p.inicio) alerts.push({ sev: 'atencao', titulo: nome + ' — sem data de início cadastrada', detalhe: 'Campo "início" vazio.', id: p.id });
-      if (p.valorTotal == null) alerts.push({ sev: 'atencao', titulo: nome + ' — sem valor total cadastrado', detalhe: 'Campo "valor total" vazio.', id: p.id });
-      if (!p.gestor) alerts.push({ sev: 'atencao', titulo: nome + ' — sem gestor cadastrado', detalhe: '', id: p.id });
-      if (!p.fiscal) alerts.push({ sev: 'atencao', titulo: nome + ' — sem fiscal cadastrado', detalhe: '', id: p.id });
-      if (p.sei && seiCount[p.sei] > 1) alerts.push({ sev: 'info', titulo: nome + ' — SEI repetido em outro contrato', detalhe: p.sei, id: p.id });
-
-      const ex = p.exec || {};
-      if (ex.contratado && ex.empenhado != null && ex.contratado > 0 && (ex.empenhado / ex.contratado) > 0.8) {
-        alerts.push({ sev: 'info', titulo: nome + ' — mais de 80% do saldo empenhado', detalhe: `${(100 * ex.empenhado / ex.contratado).toFixed(0)}% já empenhado.`, id: p.id });
+      if (p.status === 'A iniciar' && p.inicio && daysUntil(p.inicio) < 0) add('atencao', p.id, `${nome} — processo deveria ter começado`, `Início previsto para ${fmtDate(p.inicio)}.`, p.inicio, 'Status');
+      if (!p.gestor && naoFinal) semGestor.push(p);
+      if (!fiscaisDe(p).length && naoFinal) semFiscal.push(p);
+      if (!p.inicio) add('atencao', p.id, `${nome} — data de início não informada`, `Só a data de fim (${fmtDate(p.fim)}) está cadastrada.`, null, 'Cadastro');
+      if (p.valorTotal == null && !/cooper/i.test(p.instrumento || '')) add('atencao', p.id, `${nome} — valor não informado`, 'O contrato está sem valor contratado cadastrado.', null, 'Cadastro');
+      if (p.sei && seiCount[p.sei] > 1) {
+        const outros = C.processos.filter(o => o.id !== p.id && o.sei === p.sei).map(procName).join(', ');
+        add('info', p.id, `${nome} — mesmo SEI usado em outro contrato`, `SEI ${p.sei}, também usado em ${outros}.`, null, 'Cadastro');
       }
+      (p.pendencias || []).forEach(pd => add(pd.sev === 'urgente' ? 'urgente' : (pd.sev === 'info' ? 'info' : 'atencao'), p.id, `${nome} — ${pd.titulo}`, pd.detalhe || '', pd.data || null, pd.tipo || 'Cadastro'));
+      if (p.sei && prefixoComum && p.sei.slice(0, 4) !== prefixoComum) add('info', p.id, `${nome} — SEI com prefixo diferente dos demais`, `SEI ${p.sei} (os outros começam com ${prefixoComum}).`, null, 'Cadastro');
+      if (p.gestor && fiscaisDe(p).includes(p.gestor)) add('atencao', p.id, `${nome} — mesma pessoa como gestor e fiscal`, `${p.gestor} aparece como gestor e fiscal.`, null, 'Pessoas');
+      if (f.total && f.faturado > f.total + 0.005) add('urgente', p.id, `${nome} — ${f.exec ? 'empenhado' : 'notas'} acima do valor do contrato`, `${f.exec ? 'Empenhado' : 'Faturado'} ${fmtMoney(f.faturado)} para um contrato de ${fmtMoney(f.total)}.`, null, 'Valores');
+      else if (f.total && f.faturado > 0 && f.pct >= 0.8 && naoFinal) add('atencao', p.id, `${nome} — saldo acabando (${Math.round(f.pct * 100)}% ${f.exec ? 'empenhado' : 'usado'})`, `Restam ${fmtMoney(f.saldo)}.`, null, 'Valores');
+      if (p.status === 'Finalizado' && f.aPagar > 0.005) add('urgente', p.id, `${nome} — finalizado com pagamento em aberto`, `Ainda faltam ${fmtMoney(f.aPagar)}.`, null, 'Pagamentos');
+    });
+    const grp = (arr, tit) => { if (!arr.length) return; if (arr.length <= 2) arr.forEach(p => add('atencao', p.id, `${procName(p)} — ${tit}`, p.contratada || '', null, 'Pessoas')); else add('atencao', null, `${tit}: ${arr.length} contratos`, arr.map(procName).join(', '), null, 'Pessoas'); };
+    grp(semGestor, 'gestor não cadastrado');
+    grp(semFiscal, 'fiscais não cadastrados');
 
-      (p.pendencias || []).forEach(pd => {
-        alerts.push({ sev: pd.sev === 'urgente' ? 'urgente' : (pd.sev === 'atencao' ? 'atencao' : 'info'), titulo: nome + ' — ' + pd.titulo, detalhe: pd.detalhe || '', id: p.id });
-      });
+    (C.pagamentos || []).forEach(g => {
+      const p = C.processos.find(x => x.id === g.processoId), nome = procName(p), st = pagStatus(g), d = daysUntil(g.vencimento);
+      if (st === 'Atrasado') add('urgente', g.processoId, `${nome} — pagamento atrasado há ${-d} dia${-d > 1 ? 's' : ''}`, `${g.nf || 'Nota'} (${g.competencia || '—'}): faltam ${fmtMoney(saldoNota(g))}. Prazo era ${fmtDate(g.vencimento)}.`, g.vencimento, 'Pagamentos');
+      else if ((st === 'Pendente' || st === 'Parcial') && d !== null && d <= 7) add('atencao', g.processoId, `${nome} — pagamento ${diasRotulo(d)}`, `${g.nf || 'Nota'} (${g.competencia || '—'}): ${fmtMoney(saldoNota(g))}.`, g.vencimento, 'Pagamentos');
+      if (g.competencia && st === 'Aguardando nota' && daysUntil(lastDayOfMonth(g.competencia)) < -10) add('info', g.processoId, `${nome} — nota fiscal ainda não recebida`, `A nota de ${g.competencia} ainda não chegou.`, lastDayOfMonth(g.competencia), 'Pagamentos');
+      if (p && p.valorMensal && Number(g.valor) > Number(p.valorMensal) + 0.005) add('atencao', g.processoId, `${nome} — nota acima do valor mensal combinado`, `Combinado ${fmtMoney(p.valorMensal)}, nota de ${fmtMoney(g.valor)}.`, null, 'Combinado × executado');
+      if (Number(g.glosa) > 0 && !(g.motivo || '').trim()) add('atencao', g.processoId, `${nome} — glosa sem motivo registrado`, `${g.nf || 'Nota'}: glosa de ${fmtMoney(g.glosa)}.`, null, 'Combinado × executado');
+      if (!p) add('atencao', g.processoId, 'Nota ligada a processo inexistente', `${g.nf || 'Nota'} não está ligada a nenhum contrato cadastrado.`, null, 'Cadastro');
     });
 
-    const order = { urgente: 0, atencao: 1, info: 2 };
-    alerts.sort((a, b) => order[a.sev] - order[b.sev]);
-    return alerts;
+    allDeadlines().filter(z => !z.concluido && !z.auto).forEach(z => {
+      const d = daysUntil(z.data), nome = procName(C.processos.find(x => x.id === z.processoId));
+      if (d < 0) add('urgente', z.processoId, `${nome} — prazo vencido há ${-d} dia${-d > 1 ? 's' : ''}`, `${z.descricao}${z.responsavel ? ' · responsável: ' + z.responsavel : ''}`, z.data, 'Prazos');
+      else if (d <= 7) add('atencao', z.processoId, `${nome} — prazo ${diasRotulo(d)}`, z.descricao, z.data, 'Prazos');
+      else if (d <= 30) add('info', z.processoId, `${nome} — prazo ${diasRotulo(d)}`, z.descricao, z.data, 'Prazos');
+    });
+
+    return out.sort((a, b) => SEV_ORDER[a.sev] - SEV_ORDER[b.sev] || (a.data || '9').localeCompare(b.data || '9'));
   }
 
-  function renderContratosKPIs() {
-    const procs = CONTRATOS.processos;
-    const totalContratado = procs.reduce((s, p) => s + (p.valorTotal || p.exec?.contratado || 0), 0);
-    const totalEmpenhado = procs.reduce((s, p) => s + (p.exec?.empenhado || 0), 0);
-    const totalLiquidado = procs.reduce((s, p) => s + (p.exec?.liquidado || 0), 0);
-    const ativos = procs.filter(p => (p.status || '').toLowerCase().includes('andamento')).length;
-    const kpis = [
-      { label: 'Contratos ativos', value: ativos + ' / ' + procs.length },
-      { label: 'Total contratado', value: fmtMoney(totalContratado) },
-      { label: 'Total empenhado', value: fmtMoney(totalEmpenhado) },
-      { label: 'Total liquidado', value: fmtMoney(totalLiquidado) },
-    ];
-    const row = document.getElementById('contratos-kpis');
-    row.innerHTML = kpis.map(k => `
-      <div class="kpi-card">
-        <div class="kpi-value" style="font-size:19px;">${esc(k.value)}</div>
-        <div class="kpi-label">${esc(k.label)}</div>
-      </div>`).join('');
-  }
-
-  function renderContratosAlertas() {
-    const alerts = computeAlertas(CONTRATOS.processos);
-    const box = document.getElementById('contratos-alerts');
-    if (!alerts.length) { box.innerHTML = '<p class="law-note">Nenhum alerta no momento.</p>'; return; }
-    const sevLabel = { urgente: 'Urgente', atencao: 'Atenção', info: 'Acompanhar' };
-    box.innerHTML = alerts.slice(0, 30).map(a => `
-      <div class="update-row alert-row sev-${a.sev}">
-        <span class="update-tag sev-${a.sev}">${sevLabel[a.sev]}</span>
+  function renderAlertList(container, alerts, { vazio } = {}) {
+    if (!alerts.length) { container.innerHTML = `<p class="law-note">${vazio || 'Nenhum alerta no momento.'}</p>`; return; }
+    container.innerHTML = alerts.map(a => `
+      <div class="update-row alert-row sev-${a.sev}" ${a.procId ? `data-proc="${esc(a.procId)}" style="cursor:pointer;"` : ''}>
+        <span class="update-tag sev-${a.sev}">${SEV_LABEL[a.sev]}</span>
         <div class="update-body">
           <p class="update-title">${esc(a.titulo)}</p>
           ${a.detalhe ? `<p class="update-desc">${esc(a.detalhe)}</p>` : ''}
         </div>
       </div>`).join('');
+    container.querySelectorAll('[data-proc]').forEach(el => el.addEventListener('click', () => irParaContrato(el.dataset.proc)));
+  }
+
+  function renderContratosKPIs() {
+    const procs = CONTRATOS.processos;
+    const andamento = procs.filter(p => p.status === 'Em andamento');
+    const T = execTotals();
+    const abertas = (CONTRATOS.pagamentos || []).filter(isPagAberto);
+    const vencidos = allDeadlines().filter(z => !z.concluido && daysUntil(z.data) < 0);
+    const kpis = [
+      { label: 'Contratos em andamento', value: String(andamento.length), sub: 'processos' },
+      { label: 'Liquidado (execução)', value: fmtMoneyK(T.liq), sub: 'processos' },
+      { label: 'Notas fiscais em aberto', value: String(abertas.length), sub: 'pagamentos', alerta: abertas.length > 0 },
+      { label: 'Prazos e vigências vencidos', value: String(vencidos.length), sub: 'prazos', alerta: vencidos.length > 0 },
+    ];
+    const row = document.getElementById('contratos-kpis');
+    row.innerHTML = kpis.map(k => `
+      <button type="button" class="kpi-card" data-sub="${k.sub}" style="text-align:left; font-family:inherit; cursor:pointer; ${k.alerta ? 'border-color: var(--accent);' : ''}">
+        <div class="kpi-value" style="font-size:19px; ${k.alerta ? 'color: var(--accent);' : ''}">${esc(k.value)}</div>
+        <div class="kpi-label">${esc(k.label)}</div>
+      </button>`).join('');
+    row.querySelectorAll('[data-sub]').forEach(b => b.addEventListener('click', () => setContrSub(b.dataset.sub)));
+  }
+
+  function renderContrDonuts() {
+    const T = execTotals();
+    const pctLiq = T.tot ? Math.round(T.liq / T.tot * 100) : 0;
+    const pctEmp = T.tot ? Math.round((T.liq + T.pend) / T.tot * 100) : 0;
+    const box = document.getElementById('contr-donuts');
+    box.innerHTML = `
+      <button type="button" class="contr-card" data-sub="processos">
+        <h3>Liquidação dos contratos</h3>
+        <div class="contr-donut-row">
+          <div class="contr-donut" style="--pct:${pctLiq}"><span>${pctLiq}%</span></div>
+          <div class="contr-cap"><b>${fmtMoney(T.liq)}</b> de ${fmtMoney(T.tot)} contratados<span class="contr-link">Ver por contrato →</span></div>
+        </div>
+      </button>
+      <button type="button" class="contr-card" data-sub="processos">
+        <h3>Evolução da execução</h3>
+        <div class="contr-legend"><span><i style="background:var(--ink-secondary)"></i>Liquidado</span><span><i style="background:var(--accent)"></i>Falta liquidar</span><span><i style="background:var(--surface-sunken);border:1px solid var(--border)"></i>Saldo a empenhar</span></div>
+        <div class="contr-bar"><i style="width:${T.tot ? T.liq / T.tot * 100 : 0}%; background:var(--ink-secondary);"></i><i style="width:${T.tot ? T.pend / T.tot * 100 : 0}%; background:var(--accent);"></i></div>
+        <div class="contr-cap">${fmtMoney(T.liq)} liquidado · ${fmtMoney(T.pend)} a liquidar · ${fmtMoney(T.saldo)} a empenhar<span class="contr-link">Ver por contrato →</span></div>
+      </button>`;
+    box.querySelectorAll('[data-sub]').forEach(b => b.addEventListener('click', () => setContrSub(b.dataset.sub)));
+  }
+
+  function renderContrAtencao() {
+    const alerts = computeAlertas().filter(a => a.sev !== 'info');
+    renderAlertList(document.getElementById('contratos-alerts'), alerts.slice(0, 8), { vazio: 'Nada urgente no momento.' });
+  }
+
+  function renderContrProximosPrazos() {
+    const prox = allDeadlines().filter(z => !z.concluido).slice(0, 5);
+    const box = document.getElementById('contr-proximos-prazos');
+    if (!prox.length) { box.innerHTML = '<p class="law-note">Sem prazos em aberto.</p>'; return; }
+    box.innerHTML = prox.map(z => `
+      <div class="update-row" data-proc="${esc(z.processoId)}" style="cursor:pointer;">
+        <span class="update-tag ${prazoPillClass(z) === 'status-urgente' ? 'sev-urgente' : prazoPillClass(z) === 'status-suspenso' ? 'sev-atencao' : 'sev-info'}">${esc(prazoRotulo(z))}</span>
+        <div class="update-body">
+          <p class="update-title">${esc(z.descricao)} — ${esc(procName(CONTRATOS.processos.find(x => x.id === z.processoId)))}</p>
+        </div>
+      </div>`).join('');
+    box.querySelectorAll('[data-proc]').forEach(el => el.addEventListener('click', () => irParaContrato(el.dataset.proc)));
+  }
+
+  const CONTR_GLOSSARIO = [
+    ['Empenho', 'Reserva do dinheiro no orçamento para pagar o contrato.'],
+    ['Liquidação', 'Confirmação de que o serviço foi entregue; libera o pagamento.'],
+    ['Saldo a empenhar', 'Parte do valor contratado que ainda não foi reservada no orçamento.'],
+    ['Aditivo e apostilamento', 'Aditivo muda o contrato (prazo, valor); apostilamento registra ajustes simples, como dotações.'],
+    ['Suplente', 'Pessoa que substitui o gestor ou o fiscal titular nas ausências.'],
+    ['Processo de compras', 'Número do processo de compra que deu origem ao contrato.'],
+    ['Processo SEI', 'Número do processo no Sistema Eletrônico de Informações, onde ficam os documentos e as notas fiscais.'],
+    ['Vigência', 'Período em que o contrato vale. Depois do fim, só com prorrogação (termo aditivo).'],
+    ['Gestor do contrato', 'Quem acompanha o contrato como um todo e toma as decisões administrativas.'],
+    ['Fiscal do contrato', 'Quem confere se o serviço foi entregue como combinado e atesta as notas.'],
+    ['Competência', 'O mês a que a nota fiscal se refere (mês do serviço prestado).'],
+    ['Glosa', 'Parte do valor da nota que não será paga, por falha ou atraso na entrega.'],
+    ['Saldo do contrato', 'Quanto ainda pode ser faturado dentro do valor total contratado.'],
+    ['Urgente / Atenção / Acompanhar', 'Ordem de prioridade dos alertas: vermelho primeiro, depois cinza escuro, depois neutro.'],
+  ];
+  function renderContrGlossario() {
+    document.getElementById('contr-glossario').innerHTML = CONTR_GLOSSARIO.map(([a, b]) => `<div><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('');
   }
 
   function renderContratosTabela() {
     const qs = palavrasDe(contratosQuery);
     const procs = CONTRATOS.processos.filter(p => {
+      if (pcfStatus && p.status !== pcfStatus) return false;
       if (!qs.length) return true;
       textoBusca(p, '_h', x => [x.contrato, x.contratada, x.gestor, x.fiscal, x.sei, x.instrumento].filter(Boolean).join(' '));
       return qs.every(w => contemPalavra(p, '_h', w));
@@ -1772,8 +2038,9 @@
       { label: 'Liquidado', val: ex.liquidado, max: valor, color: 'var(--ink-secondary)' },
     ];
     const movs = (CONTRATOS.movimentos[id] || []).slice(0, 60);
-    const pags = CONTRATOS.pagamentos.filter(pg => pg.processoId === id);
-    const hist = CONTRATOS.historico.filter(h => h.processoId === id);
+    const pags = (CONTRATOS.pagamentos || []).filter(pg => pg.processoId === id);
+    const hist = (CONTRATOS.historico || []).filter(h => h.processoId === id);
+    const alertasProc = computeAlertas().filter(a => a.procId === id);
 
     const html = `
       <div class="detail-panel">
@@ -1798,6 +2065,11 @@
           <div class="dfact"><div class="k">Categoria</div><div class="v">${esc(p.categoria || '—')}</div></div>
           <div class="dfact"><div class="k">Valor total</div><div class="v mono">${fmtMoney(valor)}</div></div>
           <div class="dfact"><div class="k">Processo de compras</div><div class="v">${esc(p.procCompras || '—')}</div></div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Alertas deste contrato ${alertasProc.length ? '(' + alertasProc.length + ')' : ''}</h3>
+          ${alertasProc.length ? alertasProc.map(a => `<div class="pend-item"><b>${esc(a.titulo)}</b>${esc(a.detalhe || '')}</div>`).join('') : '<p class="law-note" style="margin:0;">Sem alertas neste contrato.</p>'}
         </div>
 
         ${(p.pendencias || []).length ? `
@@ -1829,7 +2101,7 @@
           <h3>Movimentos (empenhos e liquidações) — últimos ${movs.length}</h3>
           <div class="mini-table-wrap"><table class="mini-table">
             <thead><tr><th>Data</th><th>Tipo</th><th class="num">Valor</th></tr></thead>
-            <tbody>${movs.map(m => `<tr><td>${esc(m.data || m.dataLancamento || '—')}</td><td>${esc(m.tipo || m.evento || '—')}</td><td class="num">${fmtMoney(m.valor)}</td></tr>`).join('')}</tbody>
+            <tbody>${movs.map(m => `<tr><td>${esc(m.data || m.dataLancamento || '—')}</td><td>${esc(m.tipo || m.evento || '—')}</td><td class="num">${fmtMoney(m.empenhado ?? m.liquidado ?? m.valor)}</td></tr>`).join('')}</tbody>
           </table></div>
         </div>` : ''}
 
@@ -1837,8 +2109,8 @@
         <div class="detail-section">
           <h3>Notas fiscais / pagamentos</h3>
           <div class="mini-table-wrap"><table class="mini-table">
-            <thead><tr><th>Competência</th><th>NF</th><th>Leitura</th><th class="num">Valor pago</th></tr></thead>
-            <tbody>${pags.map(pg => `<tr><td>${esc(pg.competencia || '—')}</td><td>${esc(pg.nf || '—')}</td><td>${esc(pg.leitura || '—')}</td><td class="num">${fmtMoney(pg.valorPago)}</td></tr>`).join('')}</tbody>
+            <thead><tr><th>Competência</th><th>NF</th><th>Status</th><th class="num">Valor pago</th></tr></thead>
+            <tbody>${pags.map(pg => `<tr><td>${esc(pg.competencia || '—')}</td><td>${esc(pg.nf || '—')}</td><td><span class="status-pill ${PAG_PILL_CLASS[pagStatus(pg)]}">${esc(pagStatus(pg))}</span></td><td class="num">${fmtMoney(pg.valorPago)}</td></tr>`).join('')}</tbody>
           </table></div>
         </div>` : ''}
 
@@ -1860,11 +2132,160 @@
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function renderContratos() {
-    renderContratosKPIs();
-    renderContratosAlertas();
-    renderContratosTabela();
+  function renderContrPagamentos() {
+    const pags = (CONTRATOS.pagamentos || []).filter(g => {
+      if (!pgfStatus) return true;
+      if (pgfStatus === 'aberto') return isPagAberto(g);
+      return pagStatus(g) === pgfStatus;
+    }).sort((a, b) => (a.vencimento || '9').localeCompare(b.vencimento || '9'));
+    const tbody = document.getElementById('pagamentos-tbody');
+    if (!pags.length) {
+      tbody.innerHTML = '';
+      document.getElementById('pagamentos-count').textContent = (CONTRATOS.pagamentos || []).length ? 'Nenhuma nota fiscal com esse status.' : 'Nenhuma nota fiscal cadastrada ainda.';
+      return;
+    }
+    tbody.innerHTML = pags.map(g => {
+      const p = CONTRATOS.processos.find(x => x.id === g.processoId);
+      const st = pagStatus(g);
+      return `
+      <tr data-proc="${esc(g.processoId)}" style="cursor:pointer;">
+        <td>${esc(procName(p))}</td>
+        <td>${esc(g.competencia || '—')}</td>
+        <td>${esc(g.nf || '—')}</td>
+        <td><span class="status-pill ${PAG_PILL_CLASS[st]}">${esc(st)}</span></td>
+        <td class="num mono">${fmtMoney(g.valor)}</td>
+        <td class="num mono">${fmtMoney(g.valorPago)}</td>
+        <td class="num mono">${fmtMoney(saldoNota(g))}</td>
+        <td class="mono">${fmtDate(g.vencimento)}</td>
+      </tr>`;
+    }).join('');
+    tbody.querySelectorAll('[data-proc]').forEach(tr => tr.addEventListener('click', () => irParaContrato(tr.dataset.proc)));
+    document.getElementById('pagamentos-count').textContent = pags.length + ' de ' + (CONTRATOS.pagamentos || []).length + ' notas fiscais.';
   }
+
+  function renderContrPrazos() {
+    let list = allDeadlines();
+    if (przfStatus === 'abertos') list = list.filter(z => !z.concluido);
+    else if (przfStatus === 'concluidos') list = list.filter(z => z.concluido);
+    const box = document.getElementById('prazos-list');
+    if (!list.length) { box.innerHTML = '<p class="law-note">Nenhum prazo nessa situação.</p>'; document.getElementById('prazos-count').textContent = ''; return; }
+    box.innerHTML = list.map(z => `
+      <div class="update-row" data-proc="${esc(z.processoId)}" style="cursor:pointer;">
+        <span class="update-tag ${prazoPillClass(z) === 'status-urgente' ? 'sev-urgente' : prazoPillClass(z) === 'status-suspenso' ? 'sev-atencao' : 'sev-info'}">${esc(prazoRotulo(z))}</span>
+        <div class="update-body">
+          <p class="update-title">${esc(z.descricao)} — ${esc(procName(CONTRATOS.processos.find(x => x.id === z.processoId)))}</p>
+          <p class="update-desc">${fmtDate(z.data)}${z.responsavel ? ' · responsável: ' + esc(z.responsavel) : ''}${z.auto ? ' · gerado automaticamente a partir da vigência' : ''}</p>
+        </div>
+      </div>`).join('');
+    box.querySelectorAll('[data-proc]').forEach(el => el.addEventListener('click', () => irParaContrato(el.dataset.proc)));
+    document.getElementById('prazos-count').textContent = list.length + ' prazo(s).';
+  }
+
+  function renderContrPessoas() {
+    const mapa = new Map();
+    const add = (nome, papel, p) => {
+      nomesLista(nome).forEach(n => {
+        if (!mapa.has(n)) mapa.set(n, { papeis: new Set(), contratos: [] });
+        const e = mapa.get(n);
+        e.papeis.add(papel);
+        if (!e.contratos.some(c => c.id === p.id)) e.contratos.push({ id: p.id, nome: procName(p) });
+      });
+    };
+    CONTRATOS.processos.forEach(p => {
+      if (p.gestor) add(p.gestor, 'Gestor titular', p);
+      if (p.gestorSuplente) add(p.gestorSuplente, 'Gestor suplente', p);
+      if (p.fiscal) add(p.fiscal, 'Fiscal titular', p);
+      if (p.fiscalSuplente) add(p.fiscalSuplente, 'Fiscal suplente', p);
+    });
+    const nomes = [...mapa.keys()].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    const box = document.getElementById('pessoas-list');
+    if (!nomes.length) { box.innerHTML = '<p class="law-note">Nenhum gestor ou fiscal cadastrado.</p>'; return; }
+    box.innerHTML = nomes.map(n => {
+      const e = mapa.get(n);
+      return `
+      <div class="pessoa-card">
+        <div class="pessoa-nome">${esc(n)}</div>
+        <div>${[...e.papeis].map(p => `<span class="pessoa-papel">${esc(p)}</span>`).join('')}</div>
+        <div class="pessoa-contratos">${e.contratos.map(c => `<a class="contr-link-item" data-proc="${esc(c.id)}">${esc(c.nome)}</a>`).join(' · ')}</div>
+      </div>`;
+    }).join('');
+    box.querySelectorAll('[data-proc]').forEach(el => el.addEventListener('click', () => irParaContrato(el.dataset.proc)));
+  }
+
+  function renderContrAlertas() {
+    let alerts = computeAlertas();
+    if (alfSev) alerts = alerts.filter(a => a.sev === alfSev);
+    const all = computeAlertas();
+    const c = (s) => all.filter(a => a.sev === s).length;
+    document.getElementById('alertas-count').textContent = `${c('urgente')} urgente(s) · ${c('atencao')} de atenção · ${c('info')} para acompanhar.`;
+    renderAlertList(document.getElementById('alertas-list'), alerts, { vazio: 'Nenhum alerta nessa severidade.' });
+  }
+
+  function renderContrHistorico() {
+    const hist = [...(CONTRATOS.historico || [])].sort((a, b) => (b.quando || '').localeCompare(a.quando || ''));
+    const box = document.getElementById('contr-historico-list');
+    if (!hist.length) { box.innerHTML = '<p class="law-note">Nenhuma alteração registrada ainda.</p>'; return; }
+    box.innerHTML = hist.map(h => `
+      <div class="hist-item" ${h.processoId ? `data-proc="${esc(h.processoId)}" style="cursor:pointer;"` : ''}>
+        <span class="d">${esc((h.quando || '').slice(0, 16).replace('T', ' '))}</span>
+        <span>${esc(h.texto || '')}${h.processoId ? ' · ' + esc(procName(CONTRATOS.processos.find(x => x.id === h.processoId))) : ''}</span>
+      </div>`).join('');
+    box.querySelectorAll('[data-proc]').forEach(el => el.addEventListener('click', () => irParaContrato(el.dataset.proc)));
+  }
+
+  function renderContratosFooter() {
+    const hist = (CONTRATOS.historico || []);
+    const maisRecente = hist.length ? [...hist].sort((a, b) => (b.quando || '').localeCompare(a.quando || ''))[0].quando : null;
+    let texto = 'Última atualização dos dados: ';
+    if (maisRecente) {
+      const [data, hora] = maisRecente.split('T');
+      texto += fmtDate(data) + (hora ? ' às ' + hora.slice(0, 5) : '');
+    } else if (CONTRATOS.geradoEm) {
+      texto += fmtDate(CONTRATOS.geradoEm);
+    } else {
+      texto = '';
+    }
+    document.getElementById('contratos-atualizado').textContent = texto;
+  }
+
+  function renderContrSubConteudo() {
+    if (contrSub === 'dashboard') { renderContratosKPIs(); renderContrDonuts(); renderContrAtencao(); renderContrProximosPrazos(); renderContrGlossario(); }
+    else if (contrSub === 'processos') { renderContratosTabela(); }
+    else if (contrSub === 'pagamentos') { renderContrPagamentos(); }
+    else if (contrSub === 'prazos') { renderContrPrazos(); }
+    else if (contrSub === 'pessoas') { renderContrPessoas(); }
+    else if (contrSub === 'alertas') { renderContrAlertas(); }
+    else if (contrSub === 'historico') { renderContrHistorico(); }
+  }
+
+  function setContrSub(sub) {
+    contrSub = sub;
+    document.querySelectorAll('#contr-subtabs .subtab').forEach(b => b.classList.toggle('active', b.dataset.sub === sub));
+    ['dashboard', 'processos', 'pagamentos', 'prazos', 'pessoas', 'alertas', 'historico'].forEach(s => {
+      document.getElementById('contr-sub-' + s).style.display = (s === sub) ? 'block' : 'none';
+    });
+    renderContrSubConteudo();
+  }
+
+  function irParaContrato(id) {
+    if (!id) return;
+    setContrSub('processos');
+    openContratoDetail(id);
+    document.getElementById('contr-sub-processos').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderContratos() {
+    setContrSub('dashboard');
+    renderContratosFooter();
+  }
+
+  document.querySelectorAll('#contr-subtabs .subtab').forEach(btn => {
+    btn.addEventListener('click', () => setContrSub(btn.dataset.sub));
+  });
+  document.getElementById('pcf-status').addEventListener('change', (e) => { pcfStatus = e.target.value; renderContratosTabela(); });
+  document.getElementById('pgf-status').addEventListener('change', (e) => { pgfStatus = e.target.value; renderContrPagamentos(); });
+  document.getElementById('przf-status').addEventListener('change', (e) => { przfStatus = e.target.value; renderContrPrazos(); });
+  document.getElementById('alf-sev').addEventListener('change', (e) => { alfSev = e.target.value; renderContrAlertas(); });
 
   async function tryUnlockGestao(password, silent) {
     const statusEl = document.getElementById('gestao-lock-status');
