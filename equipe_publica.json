@@ -1,0 +1,75 @@
+{
+  "fonte": "https://sigconsaida.mg.gov.br/equipe-sccp/",
+  "grupos": [
+    {
+      "titulo": "SCCP — Superintendência Central de Convênios e Parcerias",
+      "pessoas": [
+        {
+          "nome": "Marcio Rodrigues",
+          "cargo": "Superintendente Central de Convênios e Parcerias (SCCP)",
+          "foto": "assets/equipe/marcio.jpg",
+          "bio": "Bacharel em Direito com especialização em Administração Pública. Servidor do Estado de Minas Gerais desde 2014, iniciou sua trajetória como estagiário na Advocacia Geral do Estado em 2012, sendo incorporado aos quadros da SEAPA/MG dois anos depois. Em 2018 juntou-se à SEGOV/MG enquanto assessor de gabinete posteriormente assumindo a Diretoria Central de Planejamento e Operacionalização. Em 2026 assumiu o posto de Superintendente Central de Convênios e Parcerias."
+        },
+        {
+          "nome": "Kamila Gonçalves",
+          "cargo": "Assessora",
+          "foto": "assets/equipe/kamila.jpg",
+          "bio": "Graduada em Administração pela Universidade FUMEC (Belo Horizonte), possui experiência no setor público desde 2013. Iniciou sua trajetória na Fundação Rural Mineira – RURALMINAS (2013 a 2014), atuando na área administrativa de frotas e contratos. Entre 2014 e 2019, integrou a Secretaria de Estado de Desenvolvimento Agrário de Minas Gerais (SEDA), onde exerceu a função de auxiliar administrativa, com atividades relacionadas à formalização de compras e contratos, execução de despesas no Portal de Compras/MG, SIAD e SIAFI, bem como à gestão de empenhos, lançamentos de notas fiscais e conformidade orçamentária. De 2019 a 2025, atuou na Secretaria de Estado de Agricultura, Pecuária e Abastecimento de Minas Gerais (SEAPA), onde desempenhou a função de Coordenadora de Convênios, com foco em rotinas administrativas, organização e entrega de resultados."
+        }
+      ]
+    },
+    {
+      "titulo": "DCGC — Diretoria Central de Gestão de Cadastros",
+      "pessoas": [
+        {
+          "nome": "Queila Nunes",
+          "cargo": "Diretora",
+          "foto": "assets/equipe/queila.jpg",
+          "bio": "Graduada em Gestão Pública, atua desde 2022 como Diretora da Diretoria Central de Gestão de Cadastros da Superintendência Central de Convênios e Parcerias. Servidora do Estado de Minas Gerais desde 1992, construiu uma sólida trajetória ao longo de diferentes secretarias. Entre 2008 e 2022, trabalhou como analista no CAGEC, adquirindo ampla experiência na gestão e análise de cadastros — experiência que sustenta sua atuação estratégica e seu compromisso com a eficiência e a transparência na administração pública."
+        },
+        { "nome": "Cristiane Vieira", "foto": "assets/equipe/cristiane.jpg" },
+        { "nome": "Elizabete Kelle", "foto": "assets/equipe/elizabete.jpg" },
+        { "nome": "Gislaine Martelo", "foto": "assets/equipe/gislaine.jpg" },
+        { "nome": "Lucia Helena", "foto": "assets/equipe/lucia.jpg" },
+        { "nome": "Luciana Melo", "foto": "assets/equipe/luciana.jpg" },
+        { "nome": "Marilia Brandão", "foto": "assets/equipe/marilia.jpg" },
+        { "nome": "Paula Cabral", "foto": "assets/equipe/paula.jpg" },
+        { "nome": "Tatiana Albernaz", "foto": "assets/equipe/tatiana.jpg" },
+        { "nome": "Vinicius Mesquita", "foto": "assets/equipe/vinicius.jpg" },
+        { "nome": "Wallace Bandeira", "foto": "assets/equipe/wallace.jpg" }
+      ]
+    },
+    {
+      "titulo": "DCGPT — Diretoria Central de Governança de Plataformas Tecnológicas",
+      "pessoas": [
+        {
+          "nome": "Lídia Botelho",
+          "cargo": "Diretora",
+          "foto": "assets/equipe/lidia.jpg",
+          "bio": "Graduada em Direito pela UFMG e Administração Pública pela Fundação João Pinheiro, Mestre em Governança, Desenvolvimento e Políticas Públicas pela Universidade de Sussex no Reino Unido. Experiência em áreas de direitos humanos, gestão e captação de recursos nacionais e internacionais do Estado de Minas Gerais e gestão de projetos de governança pelas Nações Unidas. Atualmente responsável pela área de desenvolvimento de sistemas de transferência de recursos estaduais de convênios e parcerias."
+        },
+        { "nome": "Gerda Oliveira", "foto": "assets/equipe/gerda.jpg" },
+        { "nome": "Jessica Ribeiro", "foto": "assets/equipe/jessica.jpg" },
+        { "nome": "Lucas Zaurisio", "foto": "assets/equipe/lucas.jpg" },
+        { "nome": "Tatiane Martins", "foto": "assets/equipe/tatiane.jpg" }
+      ]
+    },
+    {
+      "titulo": "DCNO — Diretoria Central de Normatização e Otimização",
+      "pessoas": [
+        {
+          "nome": "Emanuelle Fraga",
+          "cargo": "Diretora",
+          "foto": "assets/equipe/emanuelle.jpg",
+          "bio": "Graduada em Direito pela Universidade Federal de Minas Gerais (UFMG) e em Administração Pública pela Fundação João Pinheiro (FJP). Servidora pública de carreira desde 2011, atuou na Secretaria de Estado de Desenvolvimento Social e na Secretaria de Estado de Defesa Social, com foco no monitoramento de projetos. Desde 2019, integra a equipe da Secretaria de Estado de Governo, onde se dedica à elaboração de normas e orientações técnicas, além da padronização dos processos relacionados a convênios e parcerias."
+        },
+        { "nome": "Beatriz Veloso", "foto": "assets/equipe/beatriz.jpg" },
+        { "nome": "João Augusto", "foto": "assets/equipe/joao.jpg" },
+        { "nome": "Liziane Coura", "foto": "assets/equipe/liziane.jpg" },
+        { "nome": "Luísa Andrade", "foto": "assets/equipe/luisa.jpg" },
+        { "nome": "Maria Paula Papini", "foto": "assets/equipe/mariapaula.jpg" }
+      ]
+    }
+  ],
+  "aniversarios": []
+}
