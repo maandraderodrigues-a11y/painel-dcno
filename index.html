@@ -706,18 +706,40 @@
 
   .eq-group { margin-bottom: 26px; }
   .eq-group-title { font-size: 15px; font-weight: 800; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
-  .eq-leaders { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
-  .eq-leader { display: flex; gap: 14px; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 16px; background: var(--surface); }
-  .eq-avatar { flex-shrink: 0; width: 46px; height: 46px; border-radius: 50%; background: var(--surface-dark); color: var(--ink-on-dark); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; }
-  .eq-info { min-width: 0; }
-  .eq-name { font-weight: 700; font-size: 14.5px; }
-  .eq-role { font-size: 12px; color: var(--accent-soft-ink); font-weight: 600; margin: 1px 0 6px; }
-  .eq-contact { font-size: 12px; color: var(--ink-muted); display: flex; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 6px; }
-  .eq-bio { font-size: 12.5px; color: var(--ink-secondary); line-height: 1.55; margin: 0; text-align: justify; }
-  .eq-members { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
-  .eq-member { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px; background: var(--surface); }
-  .eq-member .eq-name { font-size: 13px; }
-  .eq-member .eq-contact { margin-bottom: 0; font-size: 11.5px; }
+  .eq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .eq-card {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    gap: 6px; padding: 16px 10px 14px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+    cursor: pointer; transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+  }
+  .eq-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+  .eq-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: var(--surface-2); border: 2px solid var(--border); }
+  .eq-card .eq-name { font-weight: 700; font-size: 13px; line-height: 1.3; }
+  .eq-card .eq-role { font-size: 11px; color: var(--accent-soft-ink); font-weight: 600; }
+
+  .eq-modal-backdrop {
+    position: fixed; inset: 0; background: rgba(20,10,10,.45); z-index: 80;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .eq-modal {
+    background: var(--surface); border-radius: var(--radius-lg, 16px); max-width: 440px; width: 100%;
+    padding: 26px; position: relative; box-shadow: var(--shadow-lg); text-align: center;
+  }
+  .eq-modal-close { position: absolute; top: 12px; right: 12px; width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--surface-2); color: var(--ink-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .eq-modal-photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px; border: 2px solid var(--border); }
+  .eq-modal .eq-name { font-size: 17px; margin-bottom: 2px; }
+  .eq-modal .eq-role { font-size: 12.5px; display: block; margin-bottom: 14px; }
+  .eq-modal-bio { font-size: 13px; color: var(--ink-secondary); line-height: 1.6; text-align: justify; margin: 0; }
+  .eq-modal-empty { font-size: 13px; color: var(--ink-muted); margin: 0; }
+
+  .eq-bday-panel { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); padding: 16px 18px; margin-bottom: 24px; }
+  .eq-bday-title { font-size: 13.5px; font-weight: 800; margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
+  .eq-bday-list { display: flex; flex-direction: column; gap: 8px; }
+  .eq-bday-item { display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+  .eq-bday-item .nome { font-weight: 600; }
+  .eq-bday-item .data { color: var(--accent-soft-ink); font-weight: 700; font-size: 12px; background: var(--accent-soft-bg); padding: 2px 9px; border-radius: 99px; }
+  .eq-bday-empty { font-size: 12.5px; color: var(--ink-muted); margin: 0; }
 
   .chk-list { margin: 0; padding-left: 18px; font-size: 13px; display: flex; flex-direction: column; gap: 4px; }
   .chk-list li.done { color: var(--ink-muted); text-decoration: line-through; }
@@ -1247,29 +1269,16 @@
           <p class="page-sub">Quem é quem na Superintendência Central de Convênios e Parcerias.</p>
         </div>
 
-        <div class="warn-banner">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
-          <div>
-            <strong>Área restrita da Gestão SCCP.</strong>
-            Contatos da equipe (e-mail, telefone e aniversário), cifrados (AES-256) e só decifrados no seu navegador. A mesma senha de Contratos e Projetos.
-          </div>
+        <div class="eq-bday-panel">
+          <p class="eq-bday-title">🎂 Próximos aniversariantes</p>
+          <div class="eq-bday-list" id="eq-bday-list"></div>
         </div>
 
-        <div class="lock-gate" id="equipe-lock">
-          <div class="lock-icon">🔒</div>
-          <p class="lock-text">Esta área é restrita à Gestão SCCP (Contratos, Projetos e Equipe).</p>
-          <div class="lock-form">
-            <input type="password" id="equipe-pass-input" placeholder="Senha de acesso" autocomplete="off">
-            <button class="btn-red" id="equipe-unlock-btn">Acessar</button>
-          </div>
-          <p class="lock-error" id="equipe-lock-error" style="display:none;">Senha incorreta. Tente novamente.</p>
-          <p class="lock-status" id="equipe-lock-status"></p>
-        </div>
-
-        <div id="equipe-content" style="display:none;">
+        <div id="equipe-content">
           <div id="equipe-body"></div>
           <p class="law-note" id="equipe-fonte"></p>
         </div>
+        <div id="eq-modal-root"></div>
       </div>
 
       <!-- VIEW: JURISPRUDÊNCIA -->
@@ -1419,7 +1428,6 @@
     const travado = (id) => document.getElementById(id).style.display !== 'none';
     if (name === 'contratos' && GESTAO_PASSWORD && travado('gestao-lock')) tryUnlockGestao(GESTAO_PASSWORD, true);
     if (name === 'projetos' && GESTAO_PASSWORD && travado('projetos-lock')) tryUnlockProjetos(GESTAO_PASSWORD, true);
-    if (name === 'equipe' && GESTAO_PASSWORD && travado('equipe-lock')) tryUnlockEquipe(GESTAO_PASSWORD, true);
   }
 
   document.querySelectorAll('.gt-link[data-gview]').forEach(btn => {
@@ -2133,37 +2141,68 @@
   }
 
   function renderEquipe() {
-    const eq = PROJETOS.equipe;
-    document.getElementById('equipe-body').innerHTML = eq.grupos.map(g => {
-      const iniciais = (nome) => nome.split(' ').filter(Boolean).slice(0, 2).map(p => p[0]).join('').toUpperCase();
-      const contato = (p) => [p.email, p.tel, p.ramal ? 'ramal ' + p.ramal : '', p.aniv ? 'aniversário ' + p.aniv : ''].filter(Boolean).join(' · ');
-      return `
+    const eq = EQUIPE_PUBLICA;
+    document.getElementById('equipe-body').innerHTML = eq.grupos.map((g, gi) => `
       <div class="eq-group">
         <h3 class="eq-group-title">${esc(g.titulo)}</h3>
-        <div class="eq-leaders">
-          ${(g.perfis || []).map(p => `
-            <div class="eq-leader">
-              <div class="eq-avatar">${esc(iniciais(p.nome))}</div>
-              <div class="eq-info">
-                <div class="eq-name">${esc(p.nome)}</div>
-                ${p.cargo ? `<div class="eq-role">${esc(p.cargo)}</div>` : ''}
-                <div class="eq-contact">${esc(contato(p))}</div>
-                ${p.bio ? `<p class="eq-bio">${esc(p.bio)}</p>` : ''}
-              </div>
+        <div class="eq-grid">
+          ${g.pessoas.map((p, pi) => `
+            <div class="eq-card" data-g="${gi}" data-p="${pi}">
+              <img class="eq-photo" src="${esc(p.foto)}" alt="${esc(p.nome)}" loading="lazy">
+              <div class="eq-name">${esc(p.nome)}</div>
+              ${p.cargo ? `<div class="eq-role">${esc(p.cargo)}</div>` : ''}
             </div>`).join('')}
         </div>
-        ${(g.equipe || []).length ? `
-        <div class="eq-members">
-          ${g.equipe.map(p => `
-            <div class="eq-member">
-              <div class="eq-name">${esc(p.nome)}</div>
-              <div class="eq-contact">${esc(contato(p))}</div>
-            </div>`).join('')}
-        </div>` : ''}
-      </div>`;
-    }).join('');
-    document.getElementById('equipe-fonte').textContent = eq.fonte ? `Fonte: ${eq.fonte}${eq.consultado ? ' (consultado em ' + fmtDate(eq.consultado) + ')' : ''}` : '';
+      </div>`).join('');
+    document.getElementById('equipe-fonte').textContent = eq.fonte ? `Fonte: ${eq.fonte}` : '';
+    document.querySelectorAll('.eq-card').forEach(card => {
+      card.addEventListener('click', () => abrirPessoa(eq.grupos[+card.dataset.g].pessoas[+card.dataset.p]));
+    });
   }
+
+  function abrirPessoa(p) {
+    const root = document.getElementById('eq-modal-root');
+    root.innerHTML = `
+      <div class="eq-modal-backdrop">
+        <div class="eq-modal">
+          <button type="button" class="eq-modal-close" aria-label="Fechar">✕</button>
+          <img class="eq-modal-photo" src="${esc(p.foto)}" alt="${esc(p.nome)}">
+          <div class="eq-name">${esc(p.nome)}</div>
+          ${p.cargo ? `<span class="eq-role">${esc(p.cargo)}</span>` : ''}
+          ${p.bio ? `<p class="eq-modal-bio">${esc(p.bio)}</p>` : `<p class="eq-modal-empty">Sem descrição disponível.</p>`}
+        </div>
+      </div>`;
+    const fechar = () => { root.innerHTML = ''; };
+    root.querySelector('.eq-modal-close').addEventListener('click', fechar);
+    root.querySelector('.eq-modal-backdrop').addEventListener('click', (e) => { if (e.target === e.currentTarget) fechar(); });
+    document.addEventListener('keydown', function onEsc(e) { if (e.key === 'Escape') { fechar(); document.removeEventListener('keydown', onEsc); } });
+  }
+
+  function renderAniversariantes() {
+    const lista = (EQUIPE_PUBLICA.aniversarios || []).slice();
+    const el = document.getElementById('eq-bday-list');
+    if (!lista.length) {
+      el.innerHTML = '<p class="eq-bday-empty">Datas de aniversário ainda não cadastradas.</p>';
+      return;
+    }
+    const hoje = new Date();
+    const hm = hoje.getMonth() + 1, hd = hoje.getDate();
+    const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+    lista.forEach(a => { a._chave = (a.mes < hm || (a.mes === hm && a.dia < hd)) ? (a.mes * 100 + a.dia + 1300) : (a.mes * 100 + a.dia); });
+    lista.sort((a, b) => a._chave - b._chave);
+    el.innerHTML = lista.slice(0, 5).map(a => `
+      <div class="eq-bday-item">
+        <span class="nome">${esc(a.nome)}</span>
+        <span class="data">${String(a.dia).padStart(2, '0')} ${MESES[a.mes - 1]}</span>
+      </div>`).join('');
+  }
+
+  let EQUIPE_PUBLICA = null;
+  fetch('equipe_publica.json').then(r => r.json()).then(data => {
+    EQUIPE_PUBLICA = data;
+    renderEquipe();
+    renderAniversariantes();
+  });
 
   function renderProjSub() {
     ['visao', 'lista', 'historico'].forEach(s => {
@@ -2229,28 +2268,6 @@
   });
   document.getElementById('projetos-pass-input').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') tryUnlockProjetos(e.target.value);
-  });
-
-  async function tryUnlockEquipe(password, silent) {
-    const statusEl = document.getElementById('equipe-lock-status');
-    const errorEl = document.getElementById('equipe-lock-error');
-    errorEl.style.display = 'none';
-    if (!silent) statusEl.textContent = 'Carregando e decifrando…';
-    try {
-      await loadProjetosData(password);
-      document.getElementById('equipe-lock').style.display = 'none';
-      document.getElementById('equipe-content').style.display = 'block';
-      renderEquipe();
-    } catch (e) {
-      statusEl.textContent = '';
-      if (!silent) errorEl.style.display = 'block';
-    }
-  }
-  document.getElementById('equipe-unlock-btn').addEventListener('click', () => {
-    tryUnlockEquipe(document.getElementById('equipe-pass-input').value);
-  });
-  document.getElementById('equipe-pass-input').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') tryUnlockEquipe(e.target.value);
   });
 
   // Perguntas Frequentes — sintetizadas a partir dos padrões mais comuns do histórico real
@@ -2484,10 +2501,10 @@
         abrir: () => abrirProjeto(k, t.id),
       })))),
       todos: (q) => abrirProjeto(currentPlano, null, q) },
-    { id: 'equipe', nome: 'Equipe', max: 4, restrito: 'gestao', pronto: () => !!PROJETOS,
-      itens: () => indice('equipe', PROJETOS, () => PROJETOS.equipe.grupos.flatMap(g => [...(g.perfis || []), ...(g.equipe || [])].map(p => ({
+    { id: 'equipe', nome: 'Equipe', max: 4, pronto: () => !!EQUIPE_PUBLICA,
+      itens: () => indice('equipe', EQUIPE_PUBLICA, () => EQUIPE_PUBLICA.grupos.flatMap(g => g.pessoas.map(p => ({
         t: p.nome, m: [p.cargo, g.titulo].filter(Boolean).join(' · '),
-        x: [p.email, p.tel, p.ramal ? 'ramal ' + p.ramal : '', p.bio].filter(Boolean).join(' · '),
+        x: p.bio || '',
         abrir: () => goToView('equipe'),
       })))) },
     { id: 'chamados', nome: 'Chamados antigos', max: 3, restrito: 'chamados', pronto: () => CHAMADOS.length > 0,
@@ -2557,13 +2574,12 @@
     const travado = (id) => document.getElementById(id).style.display !== 'none';
     if (travado('gestao-lock')) await tryUnlockGestao(GESTAO_PASSWORD, true);
     if (travado('projetos-lock')) await tryUnlockProjetos(GESTAO_PASSWORD, true);
-    if (travado('equipe-lock')) await tryUnlockEquipe(GESTAO_PASSWORD, true);
   }
 
   function renderTravas() {
     lockEl.innerHTML = '';
     const linhas = [];
-    if (!(CONTRATOS && PROJETOS)) linhas.push({ id: 'gestao', rotulo: 'Gestão SCCP — Contratos, Projetos e Equipe' });
+    if (!(CONTRATOS && PROJETOS)) linhas.push({ id: 'gestao', rotulo: 'Gestão SCCP — Contratos e Projetos' });
     if (!CHAMADOS.length) linhas.push({ id: 'chamados', rotulo: 'Chamados antigos (Freshdesk)' });
     lockEl.style.display = linhas.length ? '' : 'none';
     if (!linhas.length) return;
@@ -2579,7 +2595,7 @@
         btn.disabled = true; err.hidden = true;
         if (l.id === 'gestao') {
           await tryUnlockGestao(inp.value, true);
-          if (CONTRATOS) { await tryUnlockProjetos(inp.value, true); await tryUnlockEquipe(inp.value, true); }
+          if (CONTRATOS) { await tryUnlockProjetos(inp.value, true); }
         } else {
           await tryUnlockChamados(inp.value, true);
         }
